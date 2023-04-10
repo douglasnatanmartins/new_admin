@@ -1,0 +1,38 @@
+DROP TABLE IF EXISTS usuarios;
+
+CREATE TABLE IF NOT EXISTS usuarios (
+    idusuario INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    usuario VARCHAR(255) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL,
+    situacao INTEGER (2) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    telefone VARCHAR(20)
+);
+
+
+DROP TABLE IF EXISTS permisao;
+
+CREATE TABLE IF NOT EXISTS permissao (
+    idpermissao INT AUTO_INCREMENT PRIMARY KEY,
+    nome_permiosao VARCHAR(255),
+    descricao_permissao VARCHAR(255),
+    ativo INT (2),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+DROP TABLE IF EXISTS usuario_permisao;
+
+CREATE TABLE IF NOT EXISTS usuario_permissao (
+    idusuariopermissao INT AUTO_INCREMENT PRIMARY KEY,
+    idusuario INT,
+    idpermissao INT,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (idusuario) REFERENCES usuarios(idusuario)
+    FOREIGN KEY (idpermissao) REFERENCES permissao(idpermissao)
+);

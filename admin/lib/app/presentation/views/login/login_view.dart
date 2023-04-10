@@ -1,0 +1,150 @@
+import 'package:admin/app/presentation/controllers/login_controller.dart';
+import 'package:admin/app/presentation/widgets/custom_text_box/custom_text_box.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:get_it/get_it.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter/material.dart' as m;
+
+class LoginView extends StatefulWidget {
+  const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  final LoginController _controller = GetIt.I<LoginController>();
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (_, constraints) {
+      return Row(
+        children: [
+          Expanded(
+              child: Container(
+            decoration: const BoxDecoration(
+                image: DecorationImage(
+                    fit: BoxFit.fill,
+                    colorFilter:
+                        ColorFilter.mode(Colors.transparent, BlendMode.srcOver),
+                    image: AssetImage('assets/img/login.jpg'))),
+          )),
+          Expanded(
+              child: Container(
+            color: Colors.grey[50],
+            constraints: const BoxConstraints(maxWidth: 21),
+            padding: const EdgeInsets.symmetric(horizontal: 50),
+            child: Container(
+              margin: EdgeInsets.only(left: constraints.maxWidth / 40),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text(
+                    'Bem vindo de volta!',
+                    style: GoogleFonts.inter(
+                      fontSize: 17,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'Faça login na seu usuário e senha',
+                    style: TextStyle(
+                      fontSize: 23,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  Observer(
+                      builder: (_) => CustomTextBox(
+                            padding: EdgeInsets.only(
+                                left: 0,
+                                top: 30,
+                                right: constraints.maxWidth / 9),
+                            label: 'Usuario',
+                            placeholder: 'Usuário',
+                            isLogin: true,
+                            error: _controller.userValido,
+                            onChanged: _controller.setName,
+                          )),
+                  Observer(builder: (_) {
+                    return CustomTextBox(
+                      padding: EdgeInsets.only(
+                          left: 0, top: 30, right: constraints.maxWidth / 9),
+                      label: 'Senha',
+                      placeholder: '******',
+                      isLogin: true,
+                      obscureText: true,
+                      error: _controller.passValido,
+                      onChanged: _controller.setPassWord,
+                    );
+                  }),
+                  Container(
+                    margin: EdgeInsets.only(
+                        right: constraints.maxWidth / 9.5, top: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        m.TextButton(
+                          child: const Text('Recuperar minha senha!'),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 30, right: constraints.maxWidth / 9),
+                    child: Observer(builder: (_) {
+                      return FilledButton(
+                          style: ButtonStyle(
+                              padding: ButtonState.all(
+                                  const EdgeInsets.symmetric(vertical: 10))),
+                          onPressed: _controller.isFormValid ? () async {
+                            await _controller.login(context);
+                          } : null,
+                          child: const Text(
+                            'ENTRAR',
+                            style: TextStyle(fontSize: 16),
+                          ));
+                    }),
+                  ),
+                  Observer(builder: (_) {
+                    if (_controller.userError != null) {
+                      return Container(
+                        margin: EdgeInsets.only(
+                            top: 30, right: constraints.maxWidth / 10),
+                        child: Text(
+                          _controller.userError!,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+                  Observer(builder: (_) {
+                    if (_controller.passError != null) {
+                      return Container(
+                        margin: EdgeInsets.only(
+                            top: 10, right: constraints.maxWidth / 10),
+                        child: Text(
+                          _controller.passError!,
+                          style: TextStyle(color: Colors.red),
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  }),
+                ],
+              ),
+            ),
+          ))
+        ],
+      );
+    });
+  }
+}
