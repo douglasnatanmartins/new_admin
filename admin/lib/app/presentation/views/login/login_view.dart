@@ -15,6 +15,7 @@ class LoginView extends StatefulWidget {
 
 class _LoginViewState extends State<LoginView> {
   final LoginController _controller = GetIt.I<LoginController>();
+  final FocusNode _save = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -59,6 +60,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   Observer(
                       builder: (_) => CustomTextBox(
+                            readOnly: _controller.isLoading,
                             padding: EdgeInsets.only(
                                 left: 0,
                                 top: 30,
@@ -71,6 +73,7 @@ class _LoginViewState extends State<LoginView> {
                           )),
                   Observer(builder: (_) {
                     return CustomTextBox(
+                      readOnly: _controller.isLoading,
                       padding: EdgeInsets.only(
                           left: 0, top: 30, right: constraints.maxWidth / 9),
                       label: 'Senha',
@@ -79,6 +82,7 @@ class _LoginViewState extends State<LoginView> {
                       obscureText: true,
                       error: _controller.passValido,
                       onChanged: _controller.setPassWord,
+                      onEditingComplete: () => _save.requestFocus(),
                     );
                   }),
                   Container(
@@ -88,8 +92,8 @@ class _LoginViewState extends State<LoginView> {
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         m.TextButton(
+                          onPressed: _controller.isLoading ? null : () {},
                           child: const Text('Recuperar minha senha!'),
-                          onPressed: () {},
                         )
                       ],
                     ),
@@ -99,12 +103,15 @@ class _LoginViewState extends State<LoginView> {
                         top: 30, right: constraints.maxWidth / 9),
                     child: Observer(builder: (_) {
                       return FilledButton(
+                          focusNode: _save,
                           style: ButtonStyle(
                               padding: ButtonState.all(
                                   const EdgeInsets.symmetric(vertical: 10))),
-                          onPressed: _controller.isFormValid ? () async {
-                            await _controller.login(context);
-                          } : null,
+                          onPressed: _controller.isLoading
+                              ? null
+                              : _controller.isFormValid
+                                  ? () async => await _controller.login(context)
+                                  : null,
                           child: const Text(
                             'ENTRAR',
                             style: TextStyle(fontSize: 16),

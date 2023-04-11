@@ -1,10 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:admin/app/core/errors/failure.dart';
-import 'package:admin/app/core/infra/keys.dart';
 import 'package:admin/app/data/data_sources/auth_datasource.dart';
 import 'package:admin/app/data/database/db.dart';
 import 'package:admin/app/data/dto/user_dto.dart';
+import 'package:admin/app/data/extensions/dartz_extension.dart';
 import 'package:admin/app/domain/entities/user_entity.dart';
 import 'package:dartz/dartz.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:mysql1/mysql1.dart';
 import 'package:password_dart/password_dart.dart';
 
 class AuthDbImp implements AuthDatasource {
@@ -24,8 +28,34 @@ class AuthDbImp implements AuthDatasource {
 
   @override
   Future<Either<Failure, UserEntity>> login(String user, String password) async {
-    await authenticate(user: user, password: password);
-    return Right(UserEntity(idUsuario: 0));
+    try{
+      final result = await authenticate(user: user, password: password);
+
+      if(result.isLeft()){
+        return Left(Failure(result.getLeft().message));
+      }
+
+      final userEntity = result.getRight();
+
+      if(userEntity != null){
+        debugPrint('Usuario ${userEntity.nome!} autenticado!');
+        return Right(userEntity);
+
+      } else {
+
+        debugPrint((result.getLeft().message));
+        return Left(Failure(result.getLeft().message));
+      }
+    } on MySqlClientError catch (e) {
+      return Left(Failure('[ERROR] -> MySqlClientError: ${e.message}'));
+    }  on MySqlException catch (e) {
+      return Left(Failure('[ERROR] -> MySqlException: ${e.message}'));
+    } on MySqlProtocolError catch (e) {
+      return Left(Failure('[ERROR] -> MySqlProtocolError: ${e.message}'));
+    } catch (e) {
+      return Left(Failure('[ERROR] -> GENERIC: ${e.toString()}'));
+    }
+    
   }
 
   @override
@@ -37,38 +67,27 @@ class AuthDbImp implements AuthDatasource {
 
   
   /*====== Autenticações =======*/
-  Future<UserEntity?> authenticate({required String user, required String password })async {
+  Future<Either<Failure, UserEntity?>> authenticate(
+    {required String user, required String password })async {
     try{
-     
       final conn = await MySQL().getConnection();
       final query = await conn!.query('Select * from usuarios where usuario = ?', [user]);
-      final result = query.fields;
 
-      if(result.isEmpty) {
-        return Future.error('Não foi possivel encontrar o usuario:$user, VERIFIQUE!');
+      if(query.isEmpty) {
+        return Left(Failure('Não foi possivel encontrar o usuario:$user, VERIFIQUE!'));
       }
 
       final userDto = UserDto.fromMap(query.first.fields);
 
-
-
-     final senhar = Password.hash(PASS_ROOT, PBKDF2());
-    final senhaAdmin = Password.hash(PASS_ADMIN, PBKDF2());
-
-    print(senhar);
-    print(senhaAdmin);
-
-      
-
-    // final verifyPass = Password.verify(password, user.senha!);
-   //  if(verifyPass){
-    //    return '';
-   //   } else {
-  //      return null;
-   //   }
+     final verifyPass = Password.verify(password, userDto.password!);
+     if(verifyPass){
+        return Right(userDto);
+      } else {
+        return Left(Failure('Senha Inválida verifique!'));
+      }
     } catch (e) {
       print(e);
-      return Future.error('[ERROR] -> in Authenticate Method by user $user');
+      return Left(Failure('[ERROR] -> Falha na autenticação do usuario: $user'));
     }
   }
 

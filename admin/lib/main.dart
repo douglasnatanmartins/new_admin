@@ -56,7 +56,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return FluentApp(
           title: 'Gestor',
-          
           themeMode: ThemeMode.dark,
           debugShowCheckedModeBanner: false,
           color: const Color(0xff268cda),

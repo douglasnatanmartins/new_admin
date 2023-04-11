@@ -38,6 +38,7 @@ dependencies:
   mobx: any
   password_dart: ^2.0.1
   dart_jsonwebtoken: ^2.6.0
+  shared_preferences: ^2.1.0
 
 dev_dependencies:
   build_runner: any

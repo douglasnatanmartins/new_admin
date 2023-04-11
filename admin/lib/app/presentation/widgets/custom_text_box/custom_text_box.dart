@@ -12,7 +12,8 @@ class CustomTextBox extends StatelessWidget {
       this.isLogin = false,
       this.obscureText = false,
       this.error = false,
-      this.padding = const EdgeInsets.only(top: 30, left: 0, right: 0)});
+      this.padding = const EdgeInsets.only(top: 30, left: 0, right: 0),
+      this.readOnly = false, this.onEditingComplete});
 
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
@@ -22,6 +23,8 @@ class CustomTextBox extends StatelessWidget {
   final bool obscureText;
   final EdgeInsetsGeometry? padding;
   final bool? error;
+  final bool? readOnly;
+  final Function()? onEditingComplete;
 
   @override
   Widget build(BuildContext context) {
@@ -30,8 +33,9 @@ class CustomTextBox extends StatelessWidget {
         child: InfoLabel(
           label: '$label:',
           labelStyle: GoogleFonts.montserrat(fontWeight: FontWeight.w500),
-          
           child: TextBox(
+            onEditingComplete: onEditingComplete,
+            readOnly: readOnly!,
             decoration: BoxDecoration(
               border: Border.all(color: error! ?Colors.grey[80] : Colors.red)
             ),
