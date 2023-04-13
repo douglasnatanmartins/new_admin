@@ -1,3 +1,4 @@
+--ENTIDADE USUARIOS
 DROP TABLE IF EXISTS usuarios;
 
 CREATE TABLE IF NOT EXISTS usuarios (
@@ -35,4 +36,40 @@ CREATE TABLE IF NOT EXISTS usuario_permissao (
     updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (idusuario) REFERENCES usuarios(idusuario)
     FOREIGN KEY (idpermissao) REFERENCES permissao(idpermissao)
+);
+
+-- ENTIDADE ENDEREÇO CLIENTE
+DROP TABLE IF EXISTS enderecocliente;
+
+CREATE TABLE IF NOT EXISTS enderecocliente (
+    idenderecocliente INT AUTO_INCREMENT PRIMARY KEY,
+    idcidade INT NOT NULL,
+    cidade VARCHAR(255) NOT NULL,
+    cep VARCHAR(255) NOT NULL,
+    rua VARCHAR(255) NOT NULL,
+    numero VARCHAR(255),
+    situacao INTEGER (2) NOT NULL,
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (idcidade) REFERENCES cidade(id)
+);
+
+-- ENTIDADE CLIENTE
+DROP TABLE IF EXISTS clientes;
+
+CREATE TABLE IF NOT EXISTS clientes (
+    idcliente INT AUTO_INCREMENT PRIMARY KEY,
+    idendereco INT NOT NULL,
+    nomeCliente VARCHAR(255) NOT NULL,
+    nomefantasia VARCHAR(255),
+    tipoCliente INTEGER(1) NOT NULL,
+    cpfCnpj VARCHAR(20) NOT NULL,
+    email VARCHAR(50),
+    telefone VARCHAR(50) NOT NULL,
+    telefoneadicional VARCHAR(50),
+    situacao INTEGER (1) NOT NULL,
+    telefoneadicional VARCHAR(255),
+    createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (idendereco) REFERENCES enderecocliente(idenderecocliente)
 );

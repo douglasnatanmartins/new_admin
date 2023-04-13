@@ -94,5 +94,6 @@ abstract class _LoginControllerBase with Store {
     .idUsuario!, dataAtual: DateTime.now());
     isLoading = false;
     CustomDialog.dismiss(context);
+    Navigator.of(context).pushNamed('/base');
   }
 }

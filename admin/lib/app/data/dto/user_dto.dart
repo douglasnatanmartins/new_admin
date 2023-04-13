@@ -35,6 +35,7 @@ class UserDto extends UserEntity {
     return UserDto(
       idUsuario: map['idusuario'] as int,
       nome: map['nome'] as String,
+      usuario: map['usuario'] as String,
       email: map['email'] as String,
       ativo: map['situacao'] as int,
       password: map['password'] as String,

@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: avoid_print, unnecessary_null_comparison
 
 import 'package:admin/app/core/errors/failure.dart';
 import 'package:admin/app/data/data_sources/auth_datasource.dart';
@@ -21,9 +21,33 @@ class AuthDbImp implements AuthDatasource {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> getUserById(int idusuario) {
-    // TODO: implement getUserById
-    throw UnimplementedError();
+  Future<Either<Failure, UserEntity>> getUserById(int idusuario) async {
+    try{
+      final conn = await MySQL().getConnection();
+      final query = await conn!.query('Select * from usuarios where idusuario = ?', [idusuario]);
+
+      if(query.isEmpty) {
+        return Left(Failure('Não foi possivel encontrar o usuario VERIFIQUE!'));
+
+      } else {
+      final userDto = UserDto.fromMap(query.first.fields);
+        if(userDto != null){
+          return Right(userDto);
+
+        } else {
+          return Left(Failure('Usuário é Nulo Contate o Administrador'));
+          
+        }
+      }
+    } on MySqlClientError catch (e) {
+      return Left(Failure('[ERROR] -> MySqlClientError: ${e.message}'));
+    }  on MySqlException catch (e) {
+      return Left(Failure('[ERROR] -> MySqlException: ${e.message}'));
+    } on MySqlProtocolError catch (e) {
+      return Left(Failure('[ERROR] -> MySqlProtocolError: ${e.message}'));
+    } catch (e) {
+      return Left(Failure('[ERROR] -> GENERIC: ${e.toString()}'));
+    }
   }
 
   @override
@@ -55,7 +79,6 @@ class AuthDbImp implements AuthDatasource {
     } catch (e) {
       return Left(Failure('[ERROR] -> GENERIC: ${e.toString()}'));
     }
-    
   }
 
   @override
@@ -90,20 +113,4 @@ class AuthDbImp implements AuthDatasource {
       return Left(Failure('[ERROR] -> Falha na autenticação do usuario: $user'));
     }
   }
-
-
-  Future<bool> updateUserToken({required String token, required int idUsuario}) async {
-    try{
-      /*
-      final PostgreSQLConnection conn = await GetIt.I<DBConfiguration>().connection;
-      const String sql = 'UPDATE usuarios SET sessiontoken = @aValue WHERE idusuario = @id';
-      await conn.mappedResultsQuery(sql, substitutionValues: {'aValue': token, 'id': idUsuario});
-      */
-      return true;
-    } catch (e) {
-      Future.error('[ERROR] -> in Update User Method by sessionToken Id:$idUsuario');
-      return false;
-    }
-  }
-
 }

@@ -1,10 +1,15 @@
-import 'package:admin/app/core/config/injectors.dart';
+import 'package:admin/app/core/config/injectors/injectors.dart';
+import 'package:admin/app/presentation/views/home/home_view.dart';
 import 'package:admin/app/presentation/views/login/login_view.dart';
+import 'package:admin/app/presentation/views/splash/splash_view.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_acrylic/window.dart' as flutter_acrylic;
+import 'package:google_fonts/google_fonts.dart';
 import 'package:window_manager/window_manager.dart';
+
+import 'app/presentation/views/base/base_layout.dart';
 
 
 bool get isDesktop {
@@ -61,14 +66,30 @@ class MyApp extends StatelessWidget {
           color: const Color(0xff268cda),
           locale: const Locale('pt', 'BR'),
           theme: FluentThemeData(
-            //accentColor: SystemTheme.accentColor.accent.toAccentColor(),
-            scaffoldBackgroundColor: const Color(0xff268cda),
+            scaffoldBackgroundColor: Colors.grey[30],
+            visualDensity: VisualDensity.standard,
             cardColor: const Color(0xFFFFFFFF),
+            navigationPaneTheme: NavigationPaneThemeData(
+              backgroundColor: const Color(0XFF171e29),
+             selectedTextStyle:ButtonState.all(GoogleFonts.montserrat(
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[10]
+             )),
+             unselectedTextStyle:ButtonState.all(GoogleFonts.montserrat(
+              color: Colors.grey[80]
+             )),
+            )
           ),
           onGenerateRoute: (settings){
             switch(settings.name){
+              case '/base':
+              return FluentPageRoute(builder: (_) => BaseLayout());
+              case '/home':
+              return FluentPageRoute(builder: (_) => HomeView());
+              case '/login':
+              return FluentPageRoute(builder: (_) => LoginView());
               default:
-              return FluentPageRoute(builder: (_) => const LoginView());
+              return FluentPageRoute(builder: (_) => const SplashView());
             }
           },
           
