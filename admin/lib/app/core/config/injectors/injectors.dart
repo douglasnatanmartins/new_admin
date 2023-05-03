@@ -32,6 +32,8 @@ class Injectors {
     ///Global Controllers
     getIt.registerLazySingleton<UserManager>(() => UserManager(getIt()));
 
+    
+
     ///DataSources
     getIt.registerLazySingleton<AuthDatasource>(() => AuthApiServicesImp());
     getIt.registerLazySingleton<ClientDataSource>(() => ClientDbImp());
