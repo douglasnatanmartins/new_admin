@@ -2,10 +2,8 @@
 import 'package:admin/app/core/config/user_manager.dart';
 import 'package:admin/app/data/data_sources/auth_datasource.dart';
 import 'package:admin/app/data/data_sources/category_datasource.dart';
-import 'package:admin/app/data/data_sources/client_datasource.dart';
 import 'package:admin/app/data/database/api_services/auth_api_services_imp.dart';
 import 'package:admin/app/data/database/api_services/category_api_services_imp.dart';
-import 'package:admin/app/data/database/locale/client_db/client_db_imp.dart';
 import 'package:admin/app/data/repositories/auth_repository_imp.dart';
 import 'package:admin/app/data/repositories/category_repository_imp.dart';
 import 'package:admin/app/data/repositories/client_repository_imp.dart';
@@ -36,7 +34,6 @@ class Injectors {
 
     ///DataSources
     getIt.registerLazySingleton<AuthDatasource>(() => AuthApiServicesImp());
-    getIt.registerLazySingleton<ClientDataSource>(() => ClientDbImp());
     getIt.registerLazySingleton<CategoryDatasource>(() => CatgeoryApiServicesImp());
     
     ///Repository

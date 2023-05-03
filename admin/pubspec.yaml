@@ -26,23 +26,18 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   window_manager: ^0.1.4
-  #intl: any
   flutter_acrylic: any
   font_awesome_flutter: ^10.4.0
   google_fonts: ^4.0.3
   fluent_ui: ^4.4.2
   dartz: ^0.10.1
-  mysql1: ^0.20.0
   get_it: any
   flutter_mobx: any
   mobx: any
-  password_dart: ^2.0.1
-  dart_jsonwebtoken: ^2.6.0
   shared_preferences: ^2.1.0
   data_table_2: ^2.4.2
   pluto_grid: ^5.4.3
-  http: ^0.13.6
-  fluentui_system_icons: ^1.1.200  
+  http: ^0.13.6 
   
 
 
