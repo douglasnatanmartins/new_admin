@@ -34,7 +34,6 @@ abstract class _UserManager with Store {
       final dataAtual = DateTime.now();
 
       if (credentials != null) {
-        final id = credentials['idusuario'];
         final dataToken =
             DateTime.tryParse(credentials['dataCadastro'] as String);
 
@@ -56,7 +55,7 @@ abstract class _UserManager with Store {
       }
     } catch (e) {
       debugPrint(e.toString());
-      return null;
+      return;
     }
   }
 }

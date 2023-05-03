@@ -1,71 +1,58 @@
+// ignore_for_file: unused_import
+
 import 'package:admin/app/domain/entities/category_entity.dart';
 import 'package:admin/app/presentation/controllers/category_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:admin/app/presentation/views/categorias/components/update_category.dart';
+import 'package:admin/app/presentation/widgets/custom_buttons/button_edit.dart';
+import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/material.dart' as m;
+import 'package:get_it/get_it.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 class DatatableCategories extends StatelessWidget {
   DatatableCategories(
       {super.key,
       required this.list,
-      required this.controller,
       required this.refresh});
 
   final List<CategoryEntity> list;
-  final CategoryController controller;
   final Function() refresh;
 
   @override
   Widget build(BuildContext context) {
     return PlutoGrid(
-     rowColorCallback: (PlutoRowColorContext rowColorContext) {
-        return rowColorContext.row.cells['situacao']?.value == 0
-            ? Colors.red.withOpacity(0.5)
+      rowColorCallback: (PlutoRowColorContext rowColorContext) {
+        return rowColorContext.row.cells['situacao']?.value == 'Inativo'
+            ? Colors.red.withOpacity(0.3)
             : Colors.white;
       },
-      
       columns: columns
         ..add(
           PlutoColumn(
-              title: 'Ações',
+              title: '',
               field: 'edit',
               type: PlutoColumnType.text(),
               enableEditingMode: false,
-              width: 100,
+              width: 70,
               minWidth: 75,
               renderer: (renderContext) {
-                return ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: renderContext.row.cells.entries
-                                    .elementAt(5)
-                                    .value
-                                    .value ==
-                                'Inativo'
-                            ? Colors.blue
-                            : Colors.yellow.shade900),
-                    onPressed: () async {
-                      /*
-                      final ClientModel clientModel = list.firstWhere((e) =>
-                          e.idcliente == renderContext.row.cells.entries.elementAt(0).value.value);
+                return CustomButtonEdit(
+                  onPressed: () async {
+                    final CategoryEntity categoryEntity = list.firstWhere((e) =>
+                        e.idCategoria ==renderContext.row.cells.entries.
+                        elementAt(0).value.value);
 
-                      final AddressModel? addressModel = await AddressRepository()
-                              .getAddressByIdUser(clientModel.idcliente!);
+                    final controller = GetIt.I<CategoryController>();
 
-                      if (addressModel != null) {
-                        controller.setInitialValue(
-                            clientModel: clientModel,
-                            addressModel: addressModel);
-                        await showDialog<bool>(
-                            context: context,
-                            builder: (_) => UpdateClient(
-                                  controller: controller,
-                                  clientModel: clientModel,
-                                  addressModel: addressModel,
-                                  refresh: refresh,
-                                ));
-                      }
-                      */
-                    },
-                    child: const Text('Editar'));
+                    await showDialog<bool>(
+                        context: context,
+                        builder: (_) => UpdateCategory(
+                              controller: controller,
+                              categoryEntity: categoryEntity,
+                              refres: refresh,
+                            ));
+                  },
+                );
               }),
         ),
       rows: list.map((e) {
@@ -109,32 +96,32 @@ class DatatableCategories extends StatelessWidget {
 
   final List<PlutoColumn> columns = <PlutoColumn>[
     PlutoColumn(
-       // width: 120,
+        width: 150,
         title: 'Id Categoria',
         field: 'id',
         type: PlutoColumnType.text(),
         enableEditingMode: false),
     PlutoColumn(
-       // width: 200,
+        width: 250,
         title: 'Nome',
         field: 'name',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
         enableFilterMenuItem: true),
     PlutoColumn(
-     //   width: 110,
+        width: 200,
         title: 'Situação',
         field: 'situacao',
         type: PlutoColumnType.text(),
         enableEditingMode: false),
     PlutoColumn(
-      //  width: 150,
+        width: 220,
         title: 'Data Registro',
         field: 'createdAt',
         type: PlutoColumnType.date(format: 'dd-MM-yyyy'),
         enableEditingMode: false),
     PlutoColumn(
-      //  width: 150,
+        width: 215,
         title: 'Data Atualização',
         field: 'updatedAt',
         type: PlutoColumnType.date(format: 'dd-MM-yyyy'),

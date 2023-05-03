@@ -39,7 +39,6 @@ class _CategoryViewState extends State<CategoryView> {
                     showDialog(
                         context: context,
                         builder: (_) => ADDCategory(
-                              controller: _controller,
                               refres: () => setState(() {}),
                             ));
                   },
@@ -53,7 +52,7 @@ class _CategoryViewState extends State<CategoryView> {
           ),
           Expanded(
             child: FutureBuilder(
-               // initialData: const <CategoryEntity>[],
+                // initialData: const <CategoryEntity>[],
                 future: _controller.findAll(widget.context),
                 builder: (_, snapshot) {
                   switch (snapshot.connectionState) {
@@ -71,9 +70,8 @@ class _CategoryViewState extends State<CategoryView> {
                           child: material.Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: DatatableCategories(
-                              list: snapshot.data!,
-                              controller: _controller,
-                              refresh: () {}),
+                                list: snapshot.data!,
+                                refresh: () => setState(() {})),
                           ),
                         );
                       }

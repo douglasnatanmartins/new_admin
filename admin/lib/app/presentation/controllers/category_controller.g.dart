@@ -41,6 +41,22 @@ mixin _$CategoryController on _CategoryControllerBase, Store {
     });
   }
 
+  late final _$situacaoAtom =
+      Atom(name: '_CategoryControllerBase.situacao', context: context);
+
+  @override
+  bool get situacao {
+    _$situacaoAtom.reportRead();
+    return super.situacao;
+  }
+
+  @override
+  set situacao(bool value) {
+    _$situacaoAtom.reportWrite(value, super.situacao, () {
+      super.situacao = value;
+    });
+  }
+
   late final _$_CategoryControllerBaseActionController =
       ActionController(name: '_CategoryControllerBase', context: context);
 
@@ -67,10 +83,33 @@ mixin _$CategoryController on _CategoryControllerBase, Store {
   }
 
   @override
+  void setSituacao(bool value) {
+    final _$actionInfo = _$_CategoryControllerBaseActionController.startAction(
+        name: '_CategoryControllerBase.setSituacao');
+    try {
+      return super.setSituacao(value);
+    } finally {
+      _$_CategoryControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setInitialValues(CategoryEntity categoryEntity) {
+    final _$actionInfo = _$_CategoryControllerBaseActionController.startAction(
+        name: '_CategoryControllerBase.setInitialValues');
+    try {
+      return super.setInitialValues(categoryEntity);
+    } finally {
+      _$_CategoryControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 name: ${name},
-obs: ${obs}
+obs: ${obs},
+situacao: ${situacao}
     ''';
   }
 }

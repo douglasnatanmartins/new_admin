@@ -59,37 +59,50 @@ class CatgeoryApiServicesImp implements CategoryDatasource {
 
   @override
   Future<Either<Failure, bool>> saveOrUpdate(CategoryEntity category) async {
+    String? body;
+    String? path;
+
+    ///Nova Categoria
     if (category.idCategoria == null) {
-      ///Salvar
-      try {
-        final url = Uri.http(URL, 'categories/new');
+      body = json.encode({
+        'idcategoria': null,
+        'nome': category.nome,
+        'descricao': category.descricao,
+        'situacao': category.situacao
+      });
+      path = 'categories/createorupdate';
 
-        final body = json.encode({
-          'idcategoria': null,
-          'nome': category.nome,
-          'descricao': category.descricao,
-          'situacao': category.situacao
-        });
-
-        var response = await http.post(url,
-            headers: ALL_HEADERS(user.userEntity!.sessionToken!), body: body);
-
-        if (response.statusCode == 200) {
-          return const Right(true);
-        } else {
-          final responseMap = json.decode(response.body);
-          return Left(Failure(responseMap['error'].toString()));
-        }
-      } on HttpException catch (e) {
-        debugPrint('HTTP ERROR: ${e.message}');
-        return Left(Failure(e.message));
-      } catch (e) {
-        debugPrint('ERROR NORMAL: $e');
-        return Left(Failure(e.toString()));
-      }
-
+    ///
     } else {
-      return Left(Failure('Não implemntado'));
+     // Editando Categoria
+      body = json.encode({
+        'idcategoria': category.idCategoria,
+        'nome': category.nome,
+        'descricao': category.descricao,
+        'situacao': category.situacao
+      });
+      path = 'categories/createorupdate';
+
+    }
+
+    try {
+      final url = Uri.http(URL, path);
+
+      var response = await http.post(url,
+          headers: ALL_HEADERS(user.userEntity!.sessionToken!), body: body);
+
+      if (response.statusCode == 200) {
+        return const Right(true);
+      } else {
+        final responseMap = json.decode(response.body);
+        return Left(Failure(responseMap['error'].toString()));
+      }
+    } on HttpException catch (e) {
+      debugPrint('HTTP ERROR: ${e.message}');
+      return Left(Failure(e.message));
+    } catch (e) {
+      debugPrint('ERROR NORMAL: $e');
+      return Left(Failure(e.toString()));
     }
   }
 }

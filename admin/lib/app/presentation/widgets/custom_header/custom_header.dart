@@ -45,7 +45,7 @@ class CustomHeader extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.only(left: 12, right: 10),
                       child: Text(
-                        _manager.userEntity!.nome!.toUpperCase(),
+                        _manager.userEntity == null ? 'Usuario' : _manager.userEntity!.nome!,
                         style: GoogleFonts.montserrat(
                           color: Colors.grey[10]
                         ),
