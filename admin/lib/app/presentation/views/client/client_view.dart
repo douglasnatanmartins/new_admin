@@ -21,7 +21,6 @@ class _ClientViewState extends State<ClientView> {
   
   @override
   Widget build(BuildContext context) {
-    print(MediaQuery.of(context).size.height);
     return ScaffoldPage(
       header: CustomHeader(title: 'clientes'),
       content: Column(
@@ -45,7 +44,7 @@ class _ClientViewState extends State<ClientView> {
             padding: EdgeInsets.only(top: 20, bottom: 20),
             child: Divider(),
           ),
-          Expanded(
+          /*Expanded(
             child: FutureBuilder(
               future: _controller.getAll(context),
               builder: (_, snapshot){
@@ -73,6 +72,7 @@ class _ClientViewState extends State<ClientView> {
               }
             }),
           )
+          */
         ],
       ),
     );

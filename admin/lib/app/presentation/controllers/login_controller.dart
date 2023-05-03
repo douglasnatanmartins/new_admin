@@ -1,5 +1,8 @@
 // ignore_for_file: use_build_context_synchronously, library_private_types_in_public_api
 
+import 'dart:convert';
+
+import 'package:admin/app/data/dto/user_dto.dart';
 import 'package:admin/app/data/extensions/dartz_extension.dart';
 import 'package:admin/app/domain/usecases/auth/auth_usecase.dart';
 import 'package:admin/app/presentation/widgets/custom_dialogs/custom_dialog.dart';
@@ -80,18 +83,19 @@ abstract class _LoginControllerBase with Store {
     await CustomDialog.loading(context: context, title: 'Carregando..');
     await await Future.delayed(const Duration(seconds: 2));
     final result = await _authUseCase.login(user!, password!);
-    
+
     if (result.isLeft()) {
       isLoading = false;
       CustomDialog.dismiss(context);
-      CustomSnackbar.show(context: context,
-       message: result.getLeft().message);
-      return; 
+      CustomSnackbar.show(cxt: context, message: result.getLeft().message);
+      return;
     }
     await Future.delayed(const Duration(seconds: 1));
 
-    SharedPref().saveInfoUser(idUsuario: result.getRight()
-    .idUsuario!, dataAtual: DateTime.now());
+    SharedPref().saveInfoUser(
+        idUsuario: result.getRight().idUsuario!,
+        dataAtual: DateTime.now(),
+        infoUser: json.encode(UserDto().toMap(result.getRight())));
     isLoading = false;
     CustomDialog.dismiss(context);
     Navigator.of(context).pushNamed('/base');

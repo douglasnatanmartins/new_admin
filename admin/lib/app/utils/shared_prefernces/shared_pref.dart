@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPref {
@@ -34,6 +36,22 @@ class SharedPref {
     }
   }
 
+  Future<void> saveInformationUser({required String infoUser}) async {
+    final pref = await SharedPreferences.getInstance();
+    final returnData = pref.getString('infoUser');
+    if (returnData != null) {
+      final response = await delete(key: 'infoUser');
+      if (response) {
+        await pref.setString('infoUser', infoUser);
+        return;
+      }
+      return;
+    } else {
+      await pref.setString('infoUser',infoUser);
+      return;
+    }
+  }
+
   Future<bool> delete({required String key}) async {
     final pref = await SharedPreferences.getInstance();
     return await pref.remove(key);
@@ -41,9 +59,11 @@ class SharedPref {
 
   Future<void> saveInfoUser(
       {required int idUsuario,
+      required String infoUser,
       required DateTime dataAtual}) async {
 
     await saveUserID(idUsuario: idUsuario);
+    await saveInformationUser(infoUser: infoUser);
     await saveTimeSession(dataAtual: dataAtual);
     return;
   }
@@ -51,6 +71,7 @@ class SharedPref {
   Future<void> removeInfoUser() async {
     await delete(key: 'IDUser');
     await delete(key: 'timeSession');
+    await delete(key: 'infoUser');
     return;
   }
 
@@ -65,6 +86,10 @@ class SharedPref {
     final dataCadastro = pref.getString('timeSession');
     if (dataCadastro == null) return null;
     info.addAll({'dataCadastro': dataCadastro});
+
+    final infoUser = pref.getString('infoUser');
+    if (infoUser == null) return null;
+    info.addAll({'infoUser': json.decode(infoUser)});
 
     return info;
   }

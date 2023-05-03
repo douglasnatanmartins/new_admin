@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserEntity {
   int? idUsuario = 0;
   String? nome;
@@ -5,7 +6,10 @@ class UserEntity {
   String? password;
   String? email;
   String? telefone;
-  int? ativo;
+  int? situacao;
+  String? sessionToken;
+  DateTime? createdAt;
+  DateTime? updatedAt;
 
   UserEntity({
     required this.idUsuario,
@@ -14,13 +18,16 @@ class UserEntity {
     this.password,
     this.email,
     this.telefone,
-    this.ativo,
+    this.situacao,
+    this.sessionToken,
+    this.createdAt,
+    this.updatedAt
   });
 
   @override
   String toString() {
-    return 'UserEntity(idUsuario: $idUsuario, nome: $nome, '
-        'usuario: $usuario, password: $password, email: $email, '
-        'telefone: $telefone, ativo: $ativo)';
+    return 'UserEntity(idUsuario: $idUsuario, nome: $nome, usuario: $usuario,'
+    ' password: $password, email: $email, telefone: $telefone, situacao: $situacao,'
+    ' sessionToken: $sessionToken, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }

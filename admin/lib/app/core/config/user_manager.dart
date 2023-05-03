@@ -1,4 +1,5 @@
 // ignore_for_file: library_private_types_in_public_api, body_might_complete_normally_nullable, use_build_context_synchronously
+import 'package:admin/app/data/dto/user_dto.dart';
 import 'package:admin/app/data/extensions/dartz_extension.dart';
 import 'package:admin/app/domain/entities/user_entity.dart';
 import 'package:admin/app/domain/usecases/auth/auth_usecase.dart';
@@ -28,6 +29,7 @@ abstract class _UserManager with Store {
   @action
   Future<void> getCurrentUser(BuildContext context) async {
     try {
+      //await SharedPref().removeInfoUser();
       final credentials = await SharedPref().getInfoUser();
       final dataAtual = DateTime.now();
 
@@ -44,18 +46,12 @@ abstract class _UserManager with Store {
           debugPrint(
               'SESSÃO VÁLIDA ATÉ ${dataToken.day}/${Months.convertInt(dataToken.month)}/${dataToken.year}!');
 
-          final user = await _authUseCase.getUserById(id);
+          Map<String, dynamic> userCredential = credentials['infoUser']; 
+          final user = UserDto.fromMap(userCredential);
+          debugPrint('TOKEN: ${user.sessionToken}');
 
-          if (user.isLeft()) {
-            CustomSnackbar.show(context: context, message: user.getLeft().message);
-            return;
-          } else {
-            if (user.getRight() != null) {
-              setUserModel(user.getRight());
-              return;
-            }
-            return;
-          }
+           setUserModel(user);
+           return;
         }
       }
     } catch (e) {

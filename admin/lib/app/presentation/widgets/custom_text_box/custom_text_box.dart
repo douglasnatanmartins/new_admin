@@ -13,7 +13,7 @@ class CustomTextBox extends StatelessWidget {
       this.obscureText = false,
       this.error = false,
       this.padding = const EdgeInsets.only(top: 30, left: 0, right: 0),
-      this.readOnly = false, this.onEditingComplete});
+      this.readOnly = false, this.onEditingComplete, this.maxLines = 1});
 
   final Function(String)? onChanged;
   final List<TextInputFormatter>? inputFormatters;
@@ -25,6 +25,7 @@ class CustomTextBox extends StatelessWidget {
   final bool? error;
   final bool? readOnly;
   final Function()? onEditingComplete;
+  final int? maxLines;
 
   @override
   Widget build(BuildContext context) {
@@ -34,12 +35,13 @@ class CustomTextBox extends StatelessWidget {
           label: '$label:',
           labelStyle: GoogleFonts.montserrat(fontWeight: FontWeight.w500),
           child: TextBox(
+            maxLines: maxLines,
             onEditingComplete: onEditingComplete,
             readOnly: readOnly!,
             decoration: BoxDecoration(
               border: Border.all(color: error! ?Colors.grey[80] : Colors.red)
             ),
-            unfocusedColor:Colors.grey[80],
+            unfocusedColor:isLogin! ? Colors.grey[80] : Colors.grey[120],
             placeholder: placeholder,
             expands: false,
             style: TextStyle(

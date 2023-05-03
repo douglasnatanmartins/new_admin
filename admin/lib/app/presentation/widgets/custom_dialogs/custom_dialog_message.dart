@@ -1,9 +1,16 @@
+import 'dart:async';
+
 import 'package:fluent_ui/fluent_ui.dart';
 
 class CustomDialogMessage {
-  static show({required BuildContext context, required String message, int? typeTitle,
-      String? btnOk, String? btnCancel, Function()? onPressed}) async {
-    typeTitle ??= 0;    
+  static show(
+      {required BuildContext context,
+      required String message,
+      int? typeTitle,
+      String? btnOk,
+      String? btnCancel,
+      Function()? onPressed}) async {
+    typeTitle ??= 0;
 
     String typeConvert(int type) {
       if (type == 1) {
@@ -17,24 +24,22 @@ class CustomDialogMessage {
       }
     }
 
+    Timer? timer;
+
     await showDialog(
         context: context,
-        builder: (_) => ContentDialog(
-              title: Text(typeConvert(typeTitle ?? 0)),
-              content: Text(message),
-              actions: [
-                typeTitle != 0 ?
-                Button(
-                  onPressed: onPressed ?? () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(btnOk ?? 'Entendido'),
-                ) : Container(),
-                FilledButton(
-                  child: Text(typeTitle == 0 ? 'Entendido': btnCancel ?? 'Cancelar'),
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ));
+        builder: (_) {
+          timer = Timer(const Duration(seconds: 3), () {
+            Navigator.of(context).pop();
+          });
+          return ContentDialog(
+            title: Text(typeConvert(typeTitle ?? 0)),
+            content: Text(message),
+          );
+        }).then((value) {
+      if (timer!.isActive) {
+        timer!.cancel();
+      }
+    });
   }
 }

@@ -1,6 +1,7 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously
+// ignore_for_file: no_leading_underscores_for_local_identifiers, use_build_context_synchronously, annotate_overrides
 
 import 'package:admin/app/presentation/views/base/components/custom_pane_item_header.dart';
+import 'package:admin/app/presentation/views/categorias/category_view.dart';
 import 'package:admin/app/presentation/views/client/client_view.dart';
 import 'package:admin/app/utils/shared_prefernces/shared_pref.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -38,6 +39,7 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
         onChanged: (index) {
           setState(() {
             currentIndex = index;
+            
           });
         },
         header: SizedBox(
@@ -111,10 +113,21 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
           PaneItem(
             selectedTileColor:ButtonState.all(
               const Color(0xff303742).withOpacity(0.5)),
+            icon: const Icon(FluentIcons.user_window),
+            title: Text('Usuarios',
+            style: GoogleFonts.montserrat(
+                  fontWeight: currentIndex == 4 ? FontWeight.w500 : null),),
+            body: SizedBox.shrink(
+              child: Container(color: Colors.purple),
+            ),
+          ),
+          PaneItem(
+            selectedTileColor:ButtonState.all(
+              const Color(0xff303742).withOpacity(0.5)),
             icon: const Icon(FluentIcons.product_catalog),
             title: Text('Produtos',
             style: GoogleFonts.montserrat(
-                  fontWeight: currentIndex == 4 ? FontWeight.w500 : null),
+                  fontWeight: currentIndex == 5 ? FontWeight.w500 : null),
                   ),
             body: SizedBox.shrink(
               child: Container(color: Colors.black),
@@ -124,11 +137,11 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
             selectedTileColor:ButtonState.all(
               const Color(0xff303742).withOpacity(0.5)),
             icon: const Icon(FluentIcons.user_window),
-            title: Text('Usuarios',
+            title: Text('Categorias',
             style: GoogleFonts.montserrat(
-                  fontWeight: currentIndex == 5 ? FontWeight.w500 : null),),
+                  fontWeight: currentIndex == 6 ? FontWeight.w500 : null),),
             body: SizedBox.shrink(
-              child: Container(color: Colors.purple),
+              child: CategoryView(context: context,),
             ),
           ),
           PaneItemSeparator(color: Colors.grey[140]),
@@ -139,7 +152,7 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
             icon: const Icon(FluentIcons.user_window),
             title: Text('Configurações',
             style: GoogleFonts.montserrat(
-                  fontWeight: currentIndex == 6 ? FontWeight.w500 : null),),
+                  fontWeight: currentIndex == 7 ? FontWeight.w500 : null),),
             body: SizedBox.shrink(
               child: Container(color: Colors.green),
             ),
@@ -150,7 +163,7 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
             icon: const Icon(FluentIcons.sign_out),
             title: Text('Sair',
             style: GoogleFonts.montserrat(
-                  fontWeight: currentIndex == 6 ? FontWeight.w500 : null),),
+                  fontWeight: currentIndex == 8 ? FontWeight.w500 : null),),
             body: SizedBox.shrink(
               child: Container(color: Colors.white),   
             ),

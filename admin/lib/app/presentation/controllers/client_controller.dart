@@ -20,7 +20,7 @@ abstract class _ClientControllerBase with Store {
     final result = await _clientUsecase.getAll(false);
     if(result.isLeft()){
       CustomSnackbar.show(
-        context: context, message: result.getLeft().message);
+        cxt: context, message: result.getLeft().message);
       return [];
     } else {
       return result.getRight();

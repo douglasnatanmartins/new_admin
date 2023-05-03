@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/material.dart' as m;
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField(
+class CustomTextFormBox extends StatelessWidget {
+  const CustomTextFormBox(
       {super.key,
       required this.title,
       this.constainsInfo = false,
@@ -12,7 +13,6 @@ class CustomTextFormField extends StatelessWidget {
       this.onTap,
       this.initialValue,
       this.enabled,
-      required this.hint,
       this.maxLines,
       this.maxLength,
       this.inputFormatters,
@@ -23,7 +23,6 @@ class CustomTextFormField extends StatelessWidget {
       this.children = 1});
 
   final String title;
-  final String hint;
   final bool constainsInfo;
   final Function()? onTap;
   final int children;
@@ -54,7 +53,7 @@ class CustomTextFormField extends StatelessWidget {
                       child: Text(
                         title,
                         style: GoogleFonts.roboto(
-                            fontSize: 14, color: Colors.grey.shade600),
+                            fontSize: 14, color: Colors.grey[600]),
                       ),
                     ),
                     const SizedBox(
@@ -62,9 +61,9 @@ class CustomTextFormField extends StatelessWidget {
                     ),
                     Container(
                       margin: const EdgeInsets.only(bottom: 6),
-                      child: Material(
+                      child: m.Material(
                         color: Colors.transparent,
-                        child: InkWell(
+                        child: m.InkWell(
                           borderRadius: BorderRadius.circular(10),
                           onTap: onTap,
                           child: Container(
@@ -84,40 +83,37 @@ class CustomTextFormField extends StatelessWidget {
                 margin: const EdgeInsets.only(bottom: 10),
                 child: Text(
                   title,
-                  style: GoogleFonts.roboto(
-                      fontSize: 14, color: Colors.grey.shade600),
+                  style:
+                      GoogleFonts.roboto(fontSize: 14, color: Colors.grey[170]),
                 ),
               ),
-        Row(
-          children: [
-            SizedBox(
+        Row(children: [
+          SizedBox(
               width: width,
-              child: TextFormField(
-                focusNode: focusNode,
-                maxLength: maxLength,
-                enabled: enabled,
-                initialValue: initialValue,
+              child: TextFormBox(
                 maxLines: maxLines,
-                decoration: InputDecoration(
-                    counterText: '',
-                    isDense: true,
-                    hintText: hint,
-                    errorText: errorText,
-                    hintStyle: GoogleFonts.roboto(
-                        fontSize: 14, color: Colors.grey.shade400),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(4))),
+                focusNode: focusNode,
+                initialValue: initialValue,
+                enabled: enabled,
+                placeholder: title,
                 style: GoogleFonts.roboto(
                     fontSize: 14,
-                    color: Colors.grey.shade700,
-                    fontWeight: FontWeight.w500),
+                    color: Colors.grey[180],
+                    fontWeight: FontWeight.w700),
+                placeholderStyle: GoogleFonts.roboto(color: Colors.grey[120]),
                 validator: validator,
                 inputFormatters: inputFormatters,
                 onChanged: onChanged,
-              ),
-            ),
-          ],
-        )
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey[200]
+                  ),
+                  boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey[100], spreadRadius: 1, blurRadius: 30),
+                ]),
+              )),
+        ])
       ],
     );
   }

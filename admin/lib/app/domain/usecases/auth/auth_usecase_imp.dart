@@ -43,7 +43,7 @@ class AuthUsecaseImp implements AuthUseCase {
       if (userEntity.nome == null ||
           userEntity.email == null ||
           userEntity.password == null ||
-          userEntity.ativo == null ||
+          userEntity.situacao == null ||
           userEntity.usuario == null) {
         return Left(Failure('Existem campos nulos, contate o administrador!'));
       }
@@ -51,8 +51,8 @@ class AuthUsecaseImp implements AuthUseCase {
       if (userEntity.nome!.isEmpty ||
           userEntity.email!.isEmpty ||
           userEntity.password!.isEmpty ||
-          userEntity.ativo! > 1 ||
-          userEntity.ativo! < 0 ||
+          userEntity.situacao! > 1 ||
+          userEntity.situacao! < 0 ||
           userEntity.usuario!.isEmpty) {
         return Left(Failure('Existem campos vazios, contate o administrador!'));
       }
@@ -63,7 +63,7 @@ class AuthUsecaseImp implements AuthUseCase {
       if (userEntity.nome == null ||
           userEntity.email == null ||
           userEntity.password == null ||
-          userEntity.ativo == null ||
+          userEntity.situacao == null ||
           userEntity.usuario == null) {
         return Left(Failure('Existem campos nulos, contate o administrador!'));
       }
@@ -71,8 +71,8 @@ class AuthUsecaseImp implements AuthUseCase {
       if (userEntity.nome!.isEmpty ||
           userEntity.email!.isEmpty ||
           userEntity.password!.isEmpty ||
-          userEntity.ativo! > 1 ||
-          userEntity.ativo! < 0 ||
+          userEntity.situacao! > 1 ||
+          userEntity.situacao! < 0 ||
           userEntity.usuario!.isEmpty) {
         return Left(Failure('Existem campos vazios, contate o administrador!'));
       }
