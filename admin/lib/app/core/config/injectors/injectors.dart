@@ -38,18 +38,18 @@ class Injectors {
     
     ///Repository
     getIt.registerLazySingleton<AuthRepository>(() => AuthRepositoryImp(getIt()));
-    getIt.registerLazySingleton<ClientRepository>(() => ClientRepositoryImp(getIt()));
+    //getIt.registerLazySingleton<ClientRepository>(() => ClientRepositoryImp(getIt()));
     getIt.registerLazySingleton<CategoryRepository>(() => CategoryReposioryImp(getIt()));
 
     ///UseCase
     getIt.registerLazySingleton<AuthUseCase>(() => AuthUsecaseImp(getIt()));
-    getIt.registerLazySingleton<ClientUsecase>(() => ClientUsecaseImp(getIt()));
+   // getIt.registerLazySingleton<ClientUsecase>(() => ClientUsecaseImp(getIt()));
     getIt.registerLazySingleton<CategoryUsecase>(() => CategoryUsecaseImp(getIt()));
 
 
     ///Controller
     getIt.registerSingleton<LoginController>(LoginController(getIt()));
-    getIt.registerSingleton<ClientController>(ClientController(getIt()));
+   // getIt.registerSingleton<ClientController>(ClientController(getIt()));
     getIt.registerSingleton<CategoryController>(CategoryController(getIt()));
   }
 }

@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:admin/app/core/config/user_manager.dart';
 import 'package:admin/app/data/dto/user_dto.dart';
 import 'package:admin/app/data/extensions/dartz_extension.dart';
 import 'package:admin/app/domain/usecases/auth/auth_usecase.dart';
@@ -9,6 +10,7 @@ import 'package:admin/app/presentation/widgets/custom_dialogs/custom_dialog.dart
 import 'package:admin/app/presentation/widgets/custom_dialogs/custom_snackbar.dart';
 import 'package:admin/app/utils/shared_prefernces/shared_pref.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 part 'login_controller.g.dart';
 
@@ -96,6 +98,7 @@ abstract class _LoginControllerBase with Store {
         idUsuario: result.getRight().idUsuario!,
         dataAtual: DateTime.now(),
         infoUser: json.encode(UserDto().toMap(result.getRight())));
+    GetIt.I<UserManager>().setUserModel(result.getRight());    
     isLoading = false;
     CustomDialog.dismiss(context);
     Navigator.of(context).pushNamed('/base');
