@@ -29,6 +29,7 @@ class CustomDatatableClients extends StatelessWidget {
               title: 'Ações',
               field: 'edit',
               type: PlutoColumnType.text(),
+              readOnly: true,
               enableEditingMode: false,
               width: 100,
               minWidth: 75,
@@ -102,6 +103,7 @@ class CustomDatatableClients extends StatelessWidget {
       ),
       onLoaded: (PlutoGridOnLoadedEvent event) {
         event.stateManager.setShowColumnFilter(true);
+        
       },
     );
   }
@@ -112,21 +114,22 @@ class CustomDatatableClients extends StatelessWidget {
         title: 'Id Usuario',
         field: 'id',
         type: PlutoColumnType.text(),
-        enableEditingMode: false),
+        enableFilterMenuItem: false,
+        ),
     PlutoColumn(
         width: 200,
         title: 'Nome',
         field: 'name',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        enableFilterMenuItem: true),
+        ),
     PlutoColumn(
         width: 260,
         title: 'E-mail',
         field: 'email',
         type: PlutoColumnType.text(),
         enableEditingMode: false,
-        enableFilterMenuItem: true),
+       ),
     PlutoColumn(
         width: 160,
         title: 'Telefone',

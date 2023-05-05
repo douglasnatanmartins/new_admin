@@ -4,6 +4,6 @@ import 'package:dartz/dartz.dart';
 
 abstract class CategoryDatasource {
   Future<Either<Failure, List<CategoryEntity>>> findAll({bool? isActive});
-  Future<Either<Failure, CategoryEntity>> findOne();
+  Future<Either<Failure, CategoryEntity>> findOne(int id);
   Future<Either<Failure, bool>> saveOrUpdate(CategoryEntity category);
 }
