@@ -1,4 +1,5 @@
 import 'package:admin/app/presentation/controllers/product_controller.dart';
+import 'package:admin/app/presentation/views/product/components/add_product.dart';
 import 'package:admin/app/presentation/views/product/components/data_table_produtos.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_header.dart';
 import 'package:admin/app/presentation/widgets/custom_widgets/empty_data.dart';
@@ -36,11 +37,11 @@ final _controller = GetIt.I<ProductController>();
                 FilledButton(
                   child: Text('+ Adicionar'.toUpperCase()),
                   onPressed: () {
-                    /* showDialog(
+                     showDialog(
                         context: context,
-                        builder: (_) => ADDCategory(
+                        builder: (_) => ADDProduct(
                               refres: () => setState(() {}),
-                            ));*/
+                            ));
                   },
                 ),
               ],
@@ -52,7 +53,6 @@ final _controller = GetIt.I<ProductController>();
           ),
           Expanded(
             child: FutureBuilder(
-                // initialData: const <CategoryEntity>[],
                 future: _controller.findAll(widget.context),
                 builder: (_, snapshot) {
                   switch (snapshot.connectionState) {
@@ -70,7 +70,7 @@ final _controller = GetIt.I<ProductController>();
                           child: material.Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: DatatableProdutos(
-                                list: [],
+                                list: snapshot.data!,
                                 refresh: () {},
                               )),
                         );
