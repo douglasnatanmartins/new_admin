@@ -14,6 +14,7 @@ class ProductDTO extends ProductEntity {
   String? descUnidadeMedida;
   int? idCategoria;
   String? descCategoria;
+  String? observacao;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -29,6 +30,7 @@ class ProductDTO extends ProductEntity {
     this.descUnidadeMedida,
     this.idCategoria,
     this.descCategoria,
+    this.observacao,
     this.createdAt,
     this.updatedAt,
   }) : super(
@@ -42,6 +44,7 @@ class ProductDTO extends ProductEntity {
             fabricante: fabricante,
             descUnidadeMedida: descUnidadeMedida,
             descCategoria: descCategoria,
+            observacao: observacao,
             createdAt: createdAt,
             updatedAt: updatedAt);
 
@@ -57,6 +60,7 @@ class ProductDTO extends ProductEntity {
       'descUnidadeMedida': descUnidadeMedida,
       'idCategoria': idCategoria,
       'descCategoria': descCategoria,
+      'observacao': observacao,
       'createdAt': createdAt?.millisecondsSinceEpoch,
       'updatedAt': updatedAt?.millisecondsSinceEpoch,
     };
@@ -74,6 +78,7 @@ class ProductDTO extends ProductEntity {
       descUnidadeMedida: map['descUnidadeMedida'] != null ? map['descUnidadeMedida'] as String : null,
       idCategoria: map['idCategoria'] != null ? map['idCategoria'] as int : null,
       descCategoria: map['descCategoria'] != null ? map['descCategoria'] as String : null,
+      observacao: map['observacao'],
       createdAt:map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,
       updatedAt:map['updatedAt'] != null ? DateTime.parse(map['updatedAt']) : null,
     );

@@ -21,7 +21,7 @@ class ProductApiServiceImp implements ProductDatasource {
     List<ProductEntity> newList = [];
 
     if (isActive != null) {
-      url = Uri.http(URL, '?products?isActive=$isActive');
+      url = Uri.http(URL, 'products', {'isActive' : isActive});
     } else {
       url = Uri.http(URL, 'products');
     }

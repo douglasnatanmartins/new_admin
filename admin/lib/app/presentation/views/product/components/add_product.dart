@@ -1,19 +1,35 @@
-import 'package:admin/app/presentation/controllers/category_controller.dart';
 import 'package:admin/app/presentation/controllers/product_controller.dart';
+import 'package:admin/app/presentation/widgets/custom_auto_sugestion_box/custom_auto_sugestion_box.dart';
 import 'package:admin/app/presentation/widgets/custom_header/const_text_form.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_form_header.dart';
 import 'package:admin/app/presentation/widgets/custom_text_box/custom_text_form_box.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ADDProduct extends StatelessWidget {
+import '../../../widgets/custom_dialogs/custom_alert_willpop.dart';
+
+class ADDProduct extends StatefulWidget {
   ADDProduct({super.key, required this.refres});
 
   final Function() refres;
+
+  @override
+  State<ADDProduct> createState() => _ADDProductState();
+}
+
+class _ADDProductState extends State<ADDProduct> {
   final _formKey = GlobalKey<FormState>();
+
   final controller = GetIt.I<ProductController>();
+
+  @override
+  Future<void> didChangeDependencies() async {
+    super.didChangeDependencies();
+    await controller.getAllFunctions(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,15 +64,20 @@ class ADDProduct extends StatelessWidget {
                                 // onChanged: controller.setName,
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: CustomTextFormBox(
-                                width: size.width / 7,
-                                title: 'Código ',
-                                validator: validator,
-                                // onChanged: controller.setName,
-                              ),
-                            ),
+                            Observer(
+                              builder: (_) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(left: 10),
+                                  child: CustomTextFormBox(
+                                    initialValue: controller.code,
+                                    enabled: false,
+                                    width: size.width / 7,
+                                    title: 'Código ',
+                                    // onChanged: controller.setName,
+                                  ),
+                                );
+                              },
+                            )
                           ],
                         ),
                       ),
@@ -84,14 +105,17 @@ class ADDProduct extends StatelessWidget {
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: CustomTextFormBox(
-                                width: size.width / 7,
-                                title: 'Unidade de Medida *',
-                                validator: validator,
-                                // onChanged: controller.setName,
-                              ),
-                            ),
+                                padding: const EdgeInsets.only(left: 10),
+                                child: CustomAutoSugestionBox(
+                                  width: size.width / 7,
+                                  list: controller.listUniMedidas
+                                      .map((e) => AutoSuggestBoxItem(
+                                            value: e.idunidadeMedida,
+                                            label: e.descricao!,
+                                          ))
+                                      .toList(),
+                                  placeholder: 'Unidade de Medida *',
+                                )),
                           ],
                         ),
                       ),
@@ -101,23 +125,18 @@ class ADDProduct extends StatelessWidget {
                         child: Row(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: CustomTextFormBox(
-                                width: size.width / 7,
-                                title: 'Categoria *',
-                                validator: validator,
-                                // onChanged: controller.setName,
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: CustomTextFormBox(
-                                width: size.width / 7,
-                                title: 'Categoria *',
-                                validator: validator,
-                                // onChanged: controller.setName,
-                              ),
-                            ),
+                                padding: const EdgeInsets.only(left: 10),
+                                child: CustomAutoSugestionBox(
+                                  width: size.width / 7,
+                                  list: controller.listCatgeorias
+                                      .map((e) => AutoSuggestBoxItem(
+                                            value: e.idCategoria,
+                                            label: e.descricao!.length > 16 ?
+                                            e.descricao!.substring(0, 16) : e.descricao!,
+                                          ))
+                                      .toList(),
+                                  placeholder: 'Categorias *',
+                                )),
                           ],
                         ),
                       ),
@@ -167,7 +186,7 @@ class ADDProduct extends StatelessWidget {
                                 style: GoogleFonts.montserrat(fontSize: 16),
                               ),
                               onPressed: () {
-                                Navigator.pop(context);
+                                CustomAlertWillPop.show(context: context);
                               },
                             ),
                           ],

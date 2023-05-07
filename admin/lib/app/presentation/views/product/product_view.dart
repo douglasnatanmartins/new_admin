@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:admin/app/presentation/controllers/product_controller.dart';
 import 'package:admin/app/presentation/views/product/components/add_product.dart';
 import 'package:admin/app/presentation/views/product/components/data_table_produtos.dart';
@@ -17,8 +19,7 @@ class ProductView extends StatefulWidget {
 }
 
 class _ProductViewState extends State<ProductView> {
-
-final _controller = GetIt.I<ProductController>();
+  final _controller = GetIt.I<ProductController>();
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +37,9 @@ final _controller = GetIt.I<ProductController>();
               children: [
                 FilledButton(
                   child: Text('+ Adicionar'.toUpperCase()),
-                  onPressed: () {
-                     showDialog(
+                  onPressed: () async {
+                    await material.showDialog(
+                      barrierDismissible: false,
                         context: context,
                         builder: (_) => ADDProduct(
                               refres: () => setState(() {}),

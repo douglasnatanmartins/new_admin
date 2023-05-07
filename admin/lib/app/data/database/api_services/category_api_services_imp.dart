@@ -21,7 +21,7 @@ class CatgeoryApiServicesImp implements CategoryDatasource {
     List<CategoryEntity> newList = [];
     Uri? url;
     if (isActive != null) {
-      url = Uri.http(URL, 'categories?isActive=$isActive');
+      url = Uri.http(URL, 'categories', {'isActive' : isActive.toString()});
     } else {
       url = Uri.http(URL, 'categories');
     }

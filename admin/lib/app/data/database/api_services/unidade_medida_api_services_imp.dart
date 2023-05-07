@@ -21,7 +21,7 @@ class UnidadeMedidaApiServicesImp implements UnidadeMedidaDataSource {
     List<UnidadeMedidaEntity> newList = [];
      Uri? url;
       if(isActive != null){
-       url = Uri.http(URL, '?unidademedida?isActive=$isActive');
+       url = Uri.http(URL, 'unidademedida', {'isActive' : '$isActive'});
       } else {
        url =  Uri.http(URL, 'unidademedida');
       }

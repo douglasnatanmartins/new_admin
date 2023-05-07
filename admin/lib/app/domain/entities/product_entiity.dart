@@ -10,6 +10,7 @@ class ProductEntity {
   String? descUnidadeMedida;
   int? idCategoria;
   String? descCategoria;
+  String? observacao;
   DateTime? createdAt;
   DateTime? updatedAt;
 
@@ -24,6 +25,7 @@ class ProductEntity {
     this.descUnidadeMedida,
     this.idCategoria,
     this.descCategoria,
+    this.observacao,
     this.createdAt,
     this.updatedAt,
   });
@@ -32,7 +34,7 @@ class ProductEntity {
   String toString() {
     return 'ProductEntity(idProduto: $idProduto, codigo: $codigo, '
         'descricao: $descricao, situacao: $situacao, embalagem: $embalagem, '
-        'fabricante: $fabricante, idunidadeMedida: $idunidadeMedida,'
+        'fabricante: $fabricante, idunidadeMedida: $idunidadeMedida, observacao: $observacao'
         ' desCategoria: $descCategoria idCategoria: $idCategoria, descUnidadeMedida:'
         ' $descUnidadeMedida, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
