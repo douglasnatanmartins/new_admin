@@ -1,4 +1,5 @@
 import 'package:admin/app/presentation/controllers/category_controller.dart';
+import 'package:admin/app/presentation/widgets/custom_buttons/custon_row_button_save.dart';
 import 'package:admin/app/presentation/widgets/custom_header/const_text_form.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_form_header.dart';
 import 'package:admin/app/presentation/widgets/custom_text_box/custom_text_form_box.dart';
@@ -10,9 +11,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../../../widgets/custom_dialogs/custom_alert_willpop.dart';
 
 class ADDCategory extends StatelessWidget {
-  ADDCategory({super.key,required this.refres});
+  ADDCategory({super.key, required this.refres});
 
-  
   final Function() refres;
   final _formKey = GlobalKey<FormState>();
   final controller = GetIt.I<CategoryController>();
@@ -20,7 +20,7 @@ class ADDCategory extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return m.Dialog(
-      backgroundColor: Colors.grey[30],
+        backgroundColor: Colors.grey[30],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: Container(
             margin: const EdgeInsets.all(16),
@@ -55,45 +55,14 @@ class ADDCategory extends StatelessWidget {
                         ),
                       ),
                       _sizedBox(),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10, top: 20, right: 40),
+                      CustomRowButtonSave(
                         width: MediaQuery.of(context).size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FilledButton(
-                                style: ButtonStyle(
-                                    padding: ButtonState.all(
-                                        const EdgeInsets.symmetric(
-                                            vertical: 6, horizontal: 30))),
-                                onPressed: () async {
-                                  if(_formKey.currentState!.validate()){
-                                    await controller.save(context: context);
-                                    refres();
-                                  }
-                                },
-                                child: Text(
-                                  'Salvar',
-                                  style: GoogleFonts.montserrat(fontSize: 16),
-                                )),
-                            const SizedBox(
-                              width: 40,
-                            ),
-                            Button(
-                              style: ButtonStyle(
-                                  padding: ButtonState.all(
-                                      const EdgeInsets.symmetric(
-                                          vertical: 6, horizontal: 30))),
-                              child: Text(
-                                'Cancelar',
-                                style: GoogleFonts.montserrat(fontSize: 16),
-                              ),
-                              onPressed: () {
-                                CustomAlertWillPop.show(context: context);
-                              },
-                            ),
-                          ],
-                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await controller.save(context: context);
+                            refres();
+                          }
+                        },
                       ),
                       _sizedBox(),
                     ],
@@ -108,8 +77,8 @@ class ADDCategory extends StatelessWidget {
   String? validator(value) {
     if (value == null) {
       return 'Campo Obrigatório';
-    } else if (value.isEmpty){
-        return 'O campo nome não pode ser vazio!';
+    } else if (value.isEmpty) {
+      return 'O campo nome não pode ser vazio!';
     } else if (value.length < 3) {
       return 'o nome precisa ter no minimo 3 caraceres';
     } else {

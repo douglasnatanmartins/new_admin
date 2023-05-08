@@ -274,11 +274,66 @@ abstract class _ProductControllerBase with Store {
     setEmbalagem(product.embalagem!);
     setFabricante(product.fabricante!);
     setQtdEstoque(product.quantidadeestoque.toString());
-    setValorCompra(product.precocompra!.toString());
-    setValorVenda(product.precovenda.toString());
+    setValorCompra(UtilBrasilFields.obterReal(product.precocompra!.toDouble()));
+    setValorVenda(UtilBrasilFields.obterReal(product.precovenda!.toDouble()));
     setCategoria(category);
     setUnidadeMedida(unidadeMedida);
     setObservacao(product.observacao!);
     setSituacao(product.situacao == 1 ? true : false);
+  }
+
+  @action
+  Future<bool> update(
+      {required BuildContext context, required ProductEntity productEntity}) async {
+    int qtdStock = int.parse(qtdEstoque!);
+    num precoCompra = UtilBrasilFields.converterMoedaParaDouble(valorCompra!);
+    num precovenda = UtilBrasilFields.converterMoedaParaDouble(valorVenda!);
+
+    if(unidadeMedida == null || unidadeMedida!.idunidadeMedida == 0){
+      CustomDialogMessage.show(context: context, btnOk: true,
+       message: 'Unidade de Medida não encontrada! Favor selecionar outra.');
+       return false;
+    }
+
+    if(category == null || category!.idCategoria == 0){
+      CustomDialogMessage.show(context: context, btnOk: true,
+       message: 'Categoria não encontrada! Favor selecionar outra.');
+       return false;
+    }
+
+    
+
+    await CustomDialog.loading(context: context, title: 'Salvando...');
+
+    final produto = ProductEntity(
+        idProduto: productEntity.idProduto,
+        descricao: nameProduct,
+        codigo: productEntity.codigo!,
+        embalagem: embalagem ?? 'Não Informado',
+        situacao: situacao ? 1 : 0,
+        fabricante: fabricante ?? 'Não Informado',
+        idunidadeMedida: unidadeMedida!.idunidadeMedida,
+        idCategoria: category!.idCategoria,
+        quantidadeestoque: qtdStock,
+        precocompra: num.tryParse(precoCompra.toString()),
+        precovenda: num.tryParse(precovenda.toString()),
+        observacao: observacao ?? 'Não Informado');
+
+    final response = await _productUsecase.saveOrUpdate(produto);
+    if (response.isLeft()) {
+      CustomDialog.dismiss(context);
+      CustomSnackbar.show(cxt: context, message: response.getLeft().message);
+      return false;
+    }
+
+    await Future.delayed(const Duration(milliseconds: 1500), () async {
+      CustomDialog.dismiss(context);
+      await CustomSnackbar.show(
+          cxt: context,
+          message: 'Registro Atualizado',
+          severity: InfoBarSeverity.success);
+      Navigator.of(context).pop();
+    });
+    return true;
   }
 }

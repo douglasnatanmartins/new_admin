@@ -4,6 +4,7 @@ import 'package:admin/app/domain/entities/category_entity.dart';
 import 'package:admin/app/domain/entities/unidade_medida_entity.dart';
 import 'package:admin/app/presentation/controllers/product_controller.dart';
 import 'package:admin/app/presentation/widgets/custom_auto_sugestion_box/custom_auto_sugestion_box.dart';
+import 'package:admin/app/presentation/widgets/custom_buttons/custon_row_button_save.dart';
 import 'package:admin/app/presentation/widgets/custom_header/const_text_form.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_form_header.dart';
 import 'package:admin/app/presentation/widgets/custom_text_box/custom_text_form_box.dart';
@@ -108,7 +109,6 @@ class _ADDProductState extends State<ADDProduct> {
                                   builder: (_) {
                                     return CustomAutoSugestionBox<
                                         UnidadeMedidaEntity>(
-
                                       width: size.width / 7,
                                       list: controller.listUniMedidas
                                           .map((e) => AutoSuggestBoxItem(
@@ -124,7 +124,8 @@ class _ADDProductState extends State<ADDProduct> {
                                       },
                                       onSelected: (value) {
                                         if (value != null) {
-                                          controller.setUnidadeMedida(value.value!);
+                                          controller
+                                              .setUnidadeMedida(value.value!);
                                         }
                                       },
                                     );
@@ -188,19 +189,19 @@ class _ADDProductState extends State<ADDProduct> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Observer(
                                   builder: (_) {
-                                    return CustomAutoSugestionBox<CategoryEntity>(
+                                    return CustomAutoSugestionBox<
+                                        CategoryEntity>(
                                       width: size.width / 6.5,
                                       list: controller.listCatgeorias
                                           .map((e) => AutoSuggestBoxItem(
                                                 value: e,
                                                 label: e.nome!.length > 20
-                                                    ? e.nome!
-                                                        .substring(0, 20)
+                                                    ? e.nome!.substring(0, 20)
                                                     : e.nome!,
                                               ))
                                           .toList(),
                                       validator: validatorSugestion,
-                                      title:'Categorias *',
+                                      title: 'Categorias *',
                                       placeholder: 'selecione...',
                                       onSelected: (value) {
                                         if (value != null) {
@@ -224,42 +225,15 @@ class _ADDProductState extends State<ADDProduct> {
                         ),
                       ),
                       _sizedBox(),
-                      Container(
-                        padding:
-                            const EdgeInsets.only(left: 10, top: 20, right: 40),
+                      CustomRowButtonSave(
                         width: size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FilledButton(
-                                style: ButtonStyle(
-                                    padding: ButtonState.all(
-                                        const EdgeInsets.symmetric(
-                                            vertical: 6, horizontal: 30))),
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    await controller.save(context: context).then((_){
-                                      widget.refres();
-                                    });
-                                  }
-                                },
-                                child: Text('Salvar',
-                                    style:
-                                        GoogleFonts.montserrat(fontSize: 16))),
-                            const SizedBox(width: 40),
-                            Button(
-                              style: ButtonStyle(
-                                  padding: ButtonState.all(
-                                      const EdgeInsets.symmetric(
-                                          vertical: 6, horizontal: 30))),
-                              child: Text('Cancelar',
-                                  style: GoogleFonts.montserrat(fontSize: 16)),
-                              onPressed: () {
-                                CustomAlertWillPop.show(context: context);
-                              },
-                            ),
-                          ],
-                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await controller.save(context: context).then((_) {
+                              widget.refres();
+                            });
+                          }
+                        },
                       ),
                       _sizedBox(),
                     ],
@@ -282,7 +256,6 @@ class _ADDProductState extends State<ADDProduct> {
       return null;
     }
   }
-  
 
   String? validatorStock(value) {
     if (value == null) {
@@ -295,7 +268,6 @@ class _ADDProductState extends State<ADDProduct> {
       return null;
     }
   }
-
 
   String? validatorSugestion(text) {
     if (text == null || text.isEmpty) {

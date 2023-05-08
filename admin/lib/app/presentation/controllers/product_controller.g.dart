@@ -259,6 +259,16 @@ mixin _$ProductController on _ProductControllerBase, Store {
         .run(() => super.save(context: context, productEntity: productEntity));
   }
 
+  late final _$updateAsyncAction =
+      AsyncAction('_ProductControllerBase.update', context: context);
+
+  @override
+  Future<bool> update(
+      {required BuildContext context, required ProductEntity productEntity}) {
+    return _$updateAsyncAction.run(
+        () => super.update(context: context, productEntity: productEntity));
+  }
+
   late final _$_ProductControllerBaseActionController =
       ActionController(name: '_ProductControllerBase', context: context);
 

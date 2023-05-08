@@ -6,6 +6,7 @@ import 'package:admin/app/domain/entities/unidade_medida_entity.dart';
 import 'package:admin/app/presentation/controllers/product_controller.dart';
 import 'package:admin/app/presentation/widgets/custom_auto_sugestion_box/custom_auto_sugestion_box.dart';
 import 'package:admin/app/presentation/widgets/custom_buttons/custom_buttom_status.dart';
+import 'package:admin/app/presentation/widgets/custom_buttons/custon_row_button_save.dart';
 import 'package:admin/app/presentation/widgets/custom_header/const_text_form.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_form_header.dart';
 import 'package:admin/app/presentation/widgets/custom_text_box/custom_text_form_box.dart';
@@ -42,7 +43,10 @@ class UpdateProduct extends StatelessWidget {
             width: size.width / 2.1,
             height: size.height / 1.23,
             child: Column(children: [
-              const CustomFormHeader(title: 'Novo Produto'),
+              /*===============================
+                  Cabeçalho
+               ================================*/
+              const CustomFormHeader(title: 'Editando Produto'),
               Form(
                 key: _formKey,
                 child: Expanded(
@@ -51,6 +55,9 @@ class UpdateProduct extends StatelessWidget {
                       const SizedBox(height: 10),
                       const ConstTextForm(),
                       _sizedBox(),
+                      /*===============================
+                          Primeira Linha de Widgets
+                      ================================*/
                       SizedBox(
                         width: size.width / 1.7,
                         child: Row(
@@ -77,6 +84,9 @@ class UpdateProduct extends StatelessWidget {
                         ),
                       ),
                       _sizedBox(),
+                      /*===============================
+                          Segunda Linha de Widgets
+                      ================================*/
                       SizedBox(
                         width: size.width / 1.7,
                         child: Row(
@@ -101,6 +111,9 @@ class UpdateProduct extends StatelessWidget {
                                 onChanged: controller.setFabricante,
                               ),
                             ),
+                            /*===============================
+                              Widget Customizado de Seleção
+                             ================================*/
                             Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Observer(
@@ -111,15 +124,13 @@ class UpdateProduct extends StatelessWidget {
                                       width: size.width / 7,
                                       list: controller.listUniMedidas
                                           .map((e) => AutoSuggestBoxItem(
-                                                value: e,
-                                                label: e.descricao!,
-                                              ))
+                                              value: e, label: e.descricao!))
                                           .toList(),
                                       title: 'Unidade de Medida *',
                                       placeholder: product != null
                                           ? product.descUnidadeMedida!
                                           : 'Unidade de Medida *',
-                                      validator: validatorSugestion,
+                                      validator: validatorSugestionUnitM,
                                       onSelected: (value) {
                                         if (value != null) {
                                           controller
@@ -133,6 +144,9 @@ class UpdateProduct extends StatelessWidget {
                         ),
                       ),
                       _sizedBox(),
+                      /*===============================
+                         Terceira Linha de Widgets
+                       ================================*/
                       SizedBox(
                         width: size.width / 1.7,
                         child: Row(
@@ -189,10 +203,16 @@ class UpdateProduct extends StatelessWidget {
                         ),
                       ),
                       _sizedBox(),
+                      /*===============================
+                         Quarta Linha de Widgets
+                       ================================*/
                       SizedBox(
                         width: size.width / 1.7,
                         child: Row(
                           children: [
+                            /*===============================
+                              Widgets Customizado de Seleção
+                            ================================*/
                             Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Observer(
@@ -209,7 +229,7 @@ class UpdateProduct extends StatelessWidget {
                                                     : e.nome!,
                                               ))
                                           .toList(),
-                                      validator: validatorSugestion,
+                                      validator: validatorSugestionCategory,
                                       title: 'Categorias *',
                                       placeholder: product != null
                                           ? product.descCategoria!
@@ -254,42 +274,17 @@ class UpdateProduct extends StatelessWidget {
                         ),
                       ),
                       _sizedBox(),
-                      Container(
-                        padding:
-                            const EdgeInsets.only(left: 10, top: 20, right: 40),
+                      /*===============================
+                         Botão Salvar
+                       ================================*/
+                      CustomRowButtonSave(
                         width: size.width,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            FilledButton(
-                                style: ButtonStyle(
-                                    padding: ButtonState.all(
-                                        const EdgeInsets.symmetric(
-                                            vertical: 6, horizontal: 30))),
-                                onPressed: () async {
-                                  if (_formKey.currentState!.validate()) {
-                                    //  await controller.save(context: context).then((_){
-
-                                    //  });
-                                  }
-                                },
-                                child: Text('Salvar',
-                                    style:
-                                        GoogleFonts.montserrat(fontSize: 16))),
-                            const SizedBox(width: 40),
-                            Button(
-                              style: ButtonStyle(
-                                  padding: ButtonState.all(
-                                      const EdgeInsets.symmetric(
-                                          vertical: 6, horizontal: 30))),
-                              child: Text('Cancelar',
-                                  style: GoogleFonts.montserrat(fontSize: 16)),
-                              onPressed: () {
-                                CustomAlertWillPop.show(context: context);
-                              },
-                            ),
-                          ],
-                        ),
+                        onPressed: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await controller.update(
+                                context: context, productEntity: product);
+                          }
+                        },
                       ),
                       _sizedBox(),
                     ],
@@ -325,8 +320,18 @@ class UpdateProduct extends StatelessWidget {
     }
   }
 
-  String? validatorSugestion(text) {
+  String? validatorSugestionCategory(text) {
     if (text == null || text.isEmpty) {
+      if (controller.category != null) return null;
+      return 'Campo Obrigatório';
+    } else {
+      return null;
+    }
+  }
+
+  String? validatorSugestionUnitM(text) {
+    if (text == null || text.isEmpty) {
+      if (controller.unidadeMedida != null) return null;
       return 'Campo Obrigatório';
     } else {
       return null;

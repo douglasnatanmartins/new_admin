@@ -102,7 +102,7 @@ class ProductApiServiceImp implements ProductDatasource {
 
       ///
     } else {
-      // Editando Categoria
+      // Editando Produto
       body = json.encode(ProductDTO().toMap(product, edit: true));
       path = 'products/createorupdate';
     }
