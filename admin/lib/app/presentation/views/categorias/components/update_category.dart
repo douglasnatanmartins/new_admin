@@ -1,5 +1,6 @@
 import 'package:admin/app/domain/entities/category_entity.dart';
 import 'package:admin/app/presentation/controllers/category_controller.dart';
+import 'package:admin/app/presentation/widgets/custom_dialogs/custom_alert_willpop.dart';
 import 'package:admin/app/presentation/widgets/custom_header/const_text_form.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_form_header.dart';
 import 'package:admin/app/presentation/widgets/custom_text_box/custom_text_form_box.dart';
@@ -133,7 +134,7 @@ class UpdateCategory extends StatelessWidget {
                                 style: GoogleFonts.montserrat(fontSize: 16),
                               ),
                               onPressed: () {
-                                Navigator.pop(context);
+                               CustomAlertWillPop.show(context: context);
                               },
                             ),
                           ],

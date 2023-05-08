@@ -7,6 +7,8 @@ import 'package:flutter/material.dart' as m;
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../../widgets/custom_dialogs/custom_alert_willpop.dart';
+
 class ADDCategory extends StatelessWidget {
   ADDCategory({super.key,required this.refres});
 
@@ -87,7 +89,7 @@ class ADDCategory extends StatelessWidget {
                                 style: GoogleFonts.montserrat(fontSize: 16),
                               ),
                               onPressed: () {
-                                Navigator.pop(context);
+                                CustomAlertWillPop.show(context: context);
                               },
                             ),
                           ],

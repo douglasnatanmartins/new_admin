@@ -25,6 +25,54 @@ mixin _$ProductController on _ProductControllerBase, Store {
     });
   }
 
+  late final _$listProductEntityAtom =
+      Atom(name: '_ProductControllerBase.listProductEntity', context: context);
+
+  @override
+  List<ProductEntity> get listProductEntity {
+    _$listProductEntityAtom.reportRead();
+    return super.listProductEntity;
+  }
+
+  @override
+  set listProductEntity(List<ProductEntity> value) {
+    _$listProductEntityAtom.reportWrite(value, super.listProductEntity, () {
+      super.listProductEntity = value;
+    });
+  }
+
+  late final _$productEditEstoqueAtom =
+      Atom(name: '_ProductControllerBase.productEditEstoque', context: context);
+
+  @override
+  ProductEntity? get productEditEstoque {
+    _$productEditEstoqueAtom.reportRead();
+    return super.productEditEstoque;
+  }
+
+  @override
+  set productEditEstoque(ProductEntity? value) {
+    _$productEditEstoqueAtom.reportWrite(value, super.productEditEstoque, () {
+      super.productEditEstoque = value;
+    });
+  }
+
+  late final _$typeMovimentoAtom =
+      Atom(name: '_ProductControllerBase.typeMovimento', context: context);
+
+  @override
+  String? get typeMovimento {
+    _$typeMovimentoAtom.reportRead();
+    return super.typeMovimento;
+  }
+
+  @override
+  set typeMovimento(String? value) {
+    _$typeMovimentoAtom.reportWrite(value, super.typeMovimento, () {
+      super.typeMovimento = value;
+    });
+  }
+
   late final _$listUniMedidasAtom =
       Atom(name: '_ProductControllerBase.listUniMedidas', context: context);
 
@@ -210,6 +258,39 @@ mixin _$ProductController on _ProductControllerBase, Store {
   }
 
   @override
+  void setListProductEntity(List<ProductEntity> value) {
+    final _$actionInfo = _$_ProductControllerBaseActionController.startAction(
+        name: '_ProductControllerBase.setListProductEntity');
+    try {
+      return super.setListProductEntity(value);
+    } finally {
+      _$_ProductControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setProductEditEstoque(ProductEntity value) {
+    final _$actionInfo = _$_ProductControllerBaseActionController.startAction(
+        name: '_ProductControllerBase.setProductEditEstoque');
+    try {
+      return super.setProductEditEstoque(value);
+    } finally {
+      _$_ProductControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTypeMovimento(String value) {
+    final _$actionInfo = _$_ProductControllerBaseActionController.startAction(
+        name: '_ProductControllerBase.setTypeMovimento');
+    try {
+      return super.setTypeMovimento(value);
+    } finally {
+      _$_ProductControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void setListUniMedidas(List<UnidadeMedidaEntity> value) {
     final _$actionInfo = _$_ProductControllerBaseActionController.startAction(
         name: '_ProductControllerBase.setListUniMedidas');
@@ -323,6 +404,9 @@ mixin _$ProductController on _ProductControllerBase, Store {
   String toString() {
     return '''
 listCatgeorias: ${listCatgeorias},
+listProductEntity: ${listProductEntity},
+productEditEstoque: ${productEditEstoque},
+typeMovimento: ${typeMovimento},
 listUniMedidas: ${listUniMedidas},
 nameProduct: ${nameProduct},
 embalagem: ${embalagem},

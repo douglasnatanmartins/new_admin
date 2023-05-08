@@ -10,6 +10,7 @@ import 'package:admin/app/domain/usecases/generate_codes/generate_code_usecase.d
 import 'package:admin/app/domain/usecases/product/product_usecase.dart';
 import 'package:admin/app/domain/usecases/unidade_medida/unidade_medida_usecase.dart';
 import 'package:admin/app/presentation/widgets/custom_dialogs/custom_dialog.dart';
+import 'package:admin/app/presentation/widgets/custom_dialogs/custom_dialog_message.dart';
 import 'package:admin/app/presentation/widgets/custom_dialogs/custom_snackbar.dart';
 import 'package:admin/app/utils/converts/convert_codes.dart';
 import 'package:brasil_fields/brasil_fields.dart';
@@ -29,12 +30,48 @@ abstract class _ProductControllerBase with Store {
       this._categoryUsecase, this._codesUsecase, this._medidaUsecase);
 
   TextEditingController codeController = TextEditingController();
+  TextEditingController qtdEstoqueController = TextEditingController();
+  TextEditingController precoCompraController = TextEditingController();
+  TextEditingController precoVendaController = TextEditingController();
+
+  List<String> listTypeAjustes = [
+    'entrada',
+    'saida',
+    'entrada por ajuste',
+    'saida por ajuste'
+  ];
 
   @observable
   List<CategoryEntity> listCatgeorias = [];
 
   @action
   void setListCategorias(List<CategoryEntity> value) => listCatgeorias = value;
+
+  @observable
+  List<ProductEntity> listProductEntity = [];
+
+  @action
+  void setListProductEntity(List<ProductEntity> value) =>
+      listProductEntity = value;
+
+  @observable
+  ProductEntity? productEditEstoque;
+
+  @action
+  void setProductEditEstoque(ProductEntity value) {
+    productEditEstoque = value;
+    qtdEstoqueController.text = value.quantidadeestoque!.toString();
+    precoCompraController.text =
+        UtilBrasilFields.obterReal(value.precocompra!.toDouble());
+    precoVendaController.text =
+        UtilBrasilFields.obterReal(value.precovenda!.toDouble());
+  }
+
+  @observable
+  String? typeMovimento;
+
+  @action
+  void setTypeMovimento(String value) => typeMovimento = value;
 
   @observable
   List<UnidadeMedidaEntity> listUniMedidas = [];
@@ -85,20 +122,17 @@ abstract class _ProductControllerBase with Store {
   @action
   void setQtdEstoque(String value) => qtdEstoque = value;
 
-
   @observable
   String? valorCompra;
 
   @action
   void setValorCompra(String value) => valorCompra = value;
 
-
   @observable
   String? valorVenda;
 
   @action
   void setValorVenda(String value) => valorVenda = value;
-
 
   Future<List<ProductEntity>> findAll(BuildContext context) async {
     final response = await _productUsecase.findAll();
@@ -107,7 +141,8 @@ abstract class _ProductControllerBase with Store {
 
       return [];
     }
-
+    final list = response.getRight().where((p) => p.situacao == 1).toList();
+    setListProductEntity(list);
     return response.getRight();
   }
 
@@ -152,10 +187,9 @@ abstract class _ProductControllerBase with Store {
   @action
   Future<void> save(
       {required BuildContext context, ProductEntity? productEntity}) async {
-
-      int qtdStock = int.parse(qtdEstoque!);  
-      num precoCompra = UtilBrasilFields.converterMoedaParaDouble(valorCompra!);
-      num precovenda = UtilBrasilFields.converterMoedaParaDouble(valorVenda!);
+    int qtdStock = int.parse(qtdEstoque!);
+    num precoCompra = UtilBrasilFields.converterMoedaParaDouble(valorCompra!);
+    num precovenda = UtilBrasilFields.converterMoedaParaDouble(valorVenda!);
 
     await CustomDialog.loading(context: context, title: 'Salvando...');
 
@@ -183,11 +217,39 @@ abstract class _ProductControllerBase with Store {
       CustomDialog.dismiss(context);
       await CustomSnackbar.show(
           cxt: context,
-          message:productEntity != null ? 'Registro Atualizado' : 'Registro Salvo!',
+          message:
+              productEntity != null ? 'Registro Atualizado' : 'Registro Salvo!',
           severity: InfoBarSeverity.success);
       Navigator.of(context).pop();
     });
     return;
-    
+  }
+
+
+  ///Validação de estoque
+  bool validateTypeEntrada(
+      BuildContext context, String typeMovimento, int stocKinit, int newStock) {
+    if (typeMovimento == 'entrada' || typeMovimento == 'entrada por ajuste') {
+      if (newStock < stocKinit) {
+        CustomDialogMessage.show(
+            btnOk: true,
+            context: context,
+            message: 'O tipo de ajuste de estoque não permite que '
+                'o novo estoque seja menor que o estoque inicial. ');
+        return false;
+      } 
+      return true;
+    } else {
+      if (stocKinit < newStock) {
+        CustomDialogMessage.show(
+            btnOk: true,
+            context: context,
+            message: 'O tipo de ajuste de estoque não permite que '
+                'o novo estoque seja menor que o estoque inicial, '
+                'pois pode implicar em estoque negativo (-).');
+        return false;
+      } 
+      return true;
+    }
   }
 }

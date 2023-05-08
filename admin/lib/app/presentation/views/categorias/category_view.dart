@@ -34,6 +34,9 @@ class _CategoryViewState extends State<CategoryView> {
             child: Row(
               children: [
                 FilledButton(
+                  style: ButtonStyle(
+                      backgroundColor: ButtonState.all(
+                          material.Colors.greenAccent.shade700)),
                   child: Text('+ Adicionar'.toUpperCase()),
                   onPressed: () {
                     showDialog(
