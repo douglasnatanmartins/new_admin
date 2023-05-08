@@ -34,7 +34,7 @@ class UnidadeMedidaDTO extends UnidadeMedidaEntity {
 
   factory UnidadeMedidaDTO.fromMap(Map<String, dynamic> map) {
     return UnidadeMedidaDTO(
-      idunidadeMedida: map['idunidadeMedida'] != null ? map['idunidadeMedida'] as int : null,
+      idunidadeMedida: map['idunidademedida'] != null ? map['idunidademedida'] as int : null,
       descricao: map['descricao'] != null ? map['descricao'] as String : null,
       situacao: map['situacao'] != null ? map['situacao'] as int : null,
      createdAt:map['createdAt'] != null ? DateTime.parse(map['createdAt']) : null,

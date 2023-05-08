@@ -20,7 +20,7 @@ class CustomTextFormBox extends StatelessWidget {
       this.focusNode,
       this.errorText,
       this.width = 200,
-      this.children = 1});
+      this.children = 1, this.controller});
 
   final String title;
   final bool constainsInfo;
@@ -36,6 +36,7 @@ class CustomTextFormBox extends StatelessWidget {
   final int? maxLength;
   final FocusNode? focusNode;
   final String? errorText;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +92,7 @@ class CustomTextFormBox extends StatelessWidget {
           SizedBox(
               width: width,
               child: TextFormBox(
+                controller: controller,
                 maxLines: maxLines,
                 focusNode: focusNode,
                 initialValue: initialValue,

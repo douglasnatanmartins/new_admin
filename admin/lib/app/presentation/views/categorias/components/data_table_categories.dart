@@ -102,7 +102,7 @@ class DatatableCategories extends StatelessWidget {
         type: PlutoColumnType.text(),
         enableEditingMode: false),
     PlutoColumn(
-        width: 250,
+        width: 260,
         title: 'Nome',
         field: 'name',
         type: PlutoColumnType.text(),

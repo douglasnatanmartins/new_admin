@@ -9,6 +9,9 @@ class ProductEntity {
   int? idunidadeMedida;
   String? descUnidadeMedida;
   int? idCategoria;
+  num? precocompra;
+  num? precovenda;
+  int? quantidadeestoque;
   String? descCategoria;
   String? observacao;
   DateTime? createdAt;
@@ -25,17 +28,24 @@ class ProductEntity {
     this.descUnidadeMedida,
     this.idCategoria,
     this.descCategoria,
+    this.precocompra,
+    this.precovenda,
+    this.quantidadeestoque,
     this.observacao,
     this.createdAt,
     this.updatedAt,
   });
 
+ 
+
   @override
   String toString() {
     return 'ProductEntity(idProduto: $idProduto, codigo: $codigo, '
-        'descricao: $descricao, situacao: $situacao, embalagem: $embalagem, '
-        'fabricante: $fabricante, idunidadeMedida: $idunidadeMedida, observacao: $observacao'
-        ' desCategoria: $descCategoria idCategoria: $idCategoria, descUnidadeMedida:'
-        ' $descUnidadeMedida, createdAt: $createdAt, updatedAt: $updatedAt)';
+    'descricao: $descricao, situacao: $situacao, embalagem: $embalagem, '
+    'fabricante: $fabricante, idunidadeMedida: $idunidadeMedida, '
+    'descUnidadeMedida: $descUnidadeMedida, idCategoria: $idCategoria, '
+    'precocompra: $precocompra, precovenda: $precovenda, '
+    'quantidadeestoque: $quantidadeestoque, descCategoria: $descCategoria, '
+    'observacao: $observacao, createdAt: $createdAt, updatedAt: $updatedAt)';
   }
 }

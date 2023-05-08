@@ -5,6 +5,7 @@ import 'package:admin/app/domain/entities/product_entiity.dart';
 import 'package:admin/app/presentation/controllers/category_controller.dart';
 import 'package:admin/app/presentation/views/categorias/components/update_category.dart';
 import 'package:admin/app/presentation/widgets/custom_buttons/button_edit.dart';
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:get_it/get_it.dart';
@@ -59,9 +60,11 @@ class DatatableProdutos extends StatelessWidget {
         ),
       rows: list.map((e) {
         return PlutoRow(cells: {
-          'idProduto': PlutoCell(value: e.idProduto),
+          'idProduto': PlutoCell(value: e.idProduto.toString()),
+          'codigo': PlutoCell(value: e.codigo),
           'descricao': PlutoCell(value: e.descricao),
-          'categoria' : PlutoCell(value: e.descCategoria),
+          'estoque' : PlutoCell(value: e.quantidadeestoque),
+          'preco_venda': PlutoCell(value: UtilBrasilFields.obterReal(e.precovenda!.toDouble())),
           'situacao': PlutoCell(value: e.situacao! == 1 ? 'Ativo' : 'Inativo'),
           'createdAt': PlutoCell(value: '${e.createdAt!}'),
           'updatedAt':
@@ -99,42 +102,52 @@ class DatatableProdutos extends StatelessWidget {
 
   final List<PlutoColumn> columns = <PlutoColumn>[
     PlutoColumn(
-        width: 150,
-        title: 'Código',
+        width: 70,
+        title: 'ID',
         field: 'idProduto',
         type: PlutoColumnType.text(),
         enableEditingMode: false),
+        PlutoColumn(
+        width: 100,
+        title: 'Codigo',
+        field: 'codigo',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false),
     PlutoColumn(
-        width: 250,
+        width: 225,
         title: 'Descrição',
         field: 'descricao',
         type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        enableFilterMenuItem: true),
+        enableEditingMode: false),
         PlutoColumn(
-        width: 250,
-        title: 'Categoria',
-        field: 'categoria',
+        width: 110,
+        title: 'Estoque',
+        field: 'estoque',
+        type: PlutoColumnType.number(),
+        enableEditingMode: false ),
+        PlutoColumn(
+        width: 140,
+        title: 'Preço Venda',
+        field: 'preco_venda',
         type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        enableFilterMenuItem: true),
+        enableEditingMode: false ),
     PlutoColumn(
-        width: 200,
+        width: 100,
         title: 'Situação',
         field: 'situacao',
         type: PlutoColumnType.text(),
         enableEditingMode: false),
     PlutoColumn(
-        width: 220,
-        title: 'Data Registro',
+        width: 150,
+        title: 'Data Movimento',
         field: 'createdAt',
-        type: PlutoColumnType.date(format: 'dd-MM-yyyy'),
+        type: PlutoColumnType.date(format: 'dd/MM/yyyy'),
         enableEditingMode: false),
     PlutoColumn(
-        width: 215,
-        title: 'Data Atualização',
+        width: 150,
+        title: 'Últi. Atualização',
         field: 'updatedAt',
-        type: PlutoColumnType.date(format: 'dd-MM-yyyy'),
+        type: PlutoColumnType.date(format: 'dd/MM/yyyy'),
         enableEditingMode: false),
   ];
 }

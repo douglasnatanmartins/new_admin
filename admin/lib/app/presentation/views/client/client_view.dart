@@ -17,7 +17,7 @@ class ClientView extends StatefulWidget {
 
 class _ClientViewState extends State<ClientView> {
 
-  final ClientController _controller = GetIt.I<ClientController>();
+ // final ClientController _controller = GetIt.I<ClientController>();
   
   @override
   Widget build(BuildContext context) {

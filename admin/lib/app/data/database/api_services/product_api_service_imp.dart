@@ -21,7 +21,7 @@ class ProductApiServiceImp implements ProductDatasource {
     List<ProductEntity> newList = [];
 
     if (isActive != null) {
-      url = Uri.http(URL, 'products', {'isActive' : isActive});
+      url = Uri.http(URL, 'products', {'isActive': isActive});
     } else {
       url = Uri.http(URL, 'products');
     }
@@ -37,8 +37,8 @@ class ProductApiServiceImp implements ProductDatasource {
           return const Right([]);
         }
         for (final map in mapResponse['response']) {
-          final unidadeMedida = ProductDTO.fromMap(map);
-          newList.add(unidadeMedida);
+          final produto = ProductDTO.fromMap(map);
+          newList.add(produto);
         }
 
         return Right(newList);
@@ -59,7 +59,7 @@ class ProductApiServiceImp implements ProductDatasource {
   Future<Either<Failure, ProductEntity>> findOne(int id) async {
     List<ProductEntity> newList = [];
     try {
-      final url = Uri.http(URL, 'categories?id=$id');
+      final url = Uri.http(URL, 'products?id=$id');
       var response = await http.get(url,
           headers: ALL_HEADERS(user.userEntity!.sessionToken!));
 
@@ -91,8 +91,40 @@ class ProductApiServiceImp implements ProductDatasource {
   }
 
   @override
-  Future<Either<Failure, bool>> saveOrUpdate(ProductEntity product) {
-    // TODO: implement saveOrUpdate
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> saveOrUpdate(ProductEntity product) async {
+    String? body;
+    String? path;
+
+    ///Novo Produto
+    if (product.idProduto == null) {
+      body = json.encode(ProductDTO().toMap(product, edit: false));
+      path = 'products/createorupdate';
+
+      ///
+    } else {
+      // Editando Categoria
+      body = json.encode(ProductDTO().toMap(product, edit: true));
+      path = 'products/createorupdate';
+    }
+
+    try {
+      final url = Uri.http(URL, path);
+
+      var response = await http.post(url,
+          headers: ALL_HEADERS(user.userEntity!.sessionToken!), body: body);
+
+      if (response.statusCode == 200) {
+        return const Right(true);
+      } else {
+        final responseMap = json.decode(response.body);
+        return Left(Failure(responseMap['error'].toString()));
+      }
+    } on HttpException catch (e) {
+      debugPrint('HTTP ERROR: ${e.message}');
+      return Left(Failure(e.message));
+    } catch (e) {
+      debugPrint('ERROR NORMAL: $e');
+      return Left(Failure(e.toString()));
+    }
   }
 }

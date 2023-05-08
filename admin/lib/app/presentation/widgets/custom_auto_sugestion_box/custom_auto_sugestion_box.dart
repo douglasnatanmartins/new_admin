@@ -2,7 +2,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomAutoSugestionBox extends StatelessWidget {
+class CustomAutoSugestionBox<T> extends StatelessWidget {
   const CustomAutoSugestionBox(
       {super.key,
       this.width = 200,
@@ -10,14 +10,17 @@ class CustomAutoSugestionBox extends StatelessWidget {
       required this.placeholder,
       this.onSelected,
       this.inputFormatters,
-      this.validator});
+      this.validator, this.onChanged,
+      this.type = Object});
 
   final double? width;
-  final List<AutoSuggestBoxItem<Object>> list;
+  final List<AutoSuggestBoxItem<T>> list;
   final String placeholder;
-  final Function(AutoSuggestBoxItem<Object>)? onSelected;
+  final Function(AutoSuggestBoxItem<T>)? onSelected;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
+  final Function(String, TextChangedReason)? onChanged;
+  final Object? type;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class CustomAutoSugestionBox extends StatelessWidget {
             style: GoogleFonts.roboto(),
           ),
           const SizedBox(height: 7.6),
-          AutoSuggestBox<Object>.form(
+          AutoSuggestBox<T>.form(
             items: list,
             placeholder: placeholder,
             style: GoogleFonts.roboto(
@@ -48,6 +51,7 @@ class CustomAutoSugestionBox extends StatelessWidget {
                       color: Colors.grey[100], spreadRadius: 1, blurRadius: 30),
                 ]),
             onSelected: onSelected,
+            onChanged: onChanged,
             inputFormatters: inputFormatters,
             validator: validator,
           ),

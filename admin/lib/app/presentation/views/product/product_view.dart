@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:admin/app/domain/entities/product_entiity.dart';
 import 'package:admin/app/presentation/controllers/product_controller.dart';
 import 'package:admin/app/presentation/views/product/components/add_product.dart';
 import 'package:admin/app/presentation/views/product/components/data_table_produtos.dart';
@@ -55,7 +56,7 @@ class _ProductViewState extends State<ProductView> {
           ),
           Expanded(
             child: FutureBuilder(
-                future: _controller.findAll(widget.context),
+               future: _controller.findAll(widget.context),
                 builder: (_, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.none:
@@ -69,8 +70,9 @@ class _ProductViewState extends State<ProductView> {
                         return const EmptyData();
                       } else {
                         return material.Material(
+                          color: Colors.grey[60],
                           child: material.Padding(
-                              padding: const EdgeInsets.all(8.0),
+                              padding: const EdgeInsets.all(4),
                               child: DatatableProdutos(
                                 list: snapshot.data!,
                                 refresh: () {},

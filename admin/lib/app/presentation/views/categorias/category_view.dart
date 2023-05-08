@@ -67,8 +67,9 @@ class _CategoryViewState extends State<CategoryView> {
                         return const EmptyData();
                       } else {
                         return material.Material(
+                          color: Colors.grey[60],
                           child: material.Padding(
-                            padding: const EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(4),
                             child: DatatableCategories(
                                 list: snapshot.data!,
                                 refresh: () => setState(() {})),

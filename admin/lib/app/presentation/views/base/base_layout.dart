@@ -153,6 +153,39 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
           /*==============================================
             Produtos
           ===============================================*/
+         /* PaneItemExpander(
+            trailing: Icon(FluentIcons.chevron_down, size: 10, color: Colors.grey[10],),
+            icon: const Icon(FluentIcons.product_catalog),
+            selectedTileColor:
+                ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
+            title: Text(
+              'Produtos',
+              style: GoogleFonts.montserrat(
+                  fontWeight: currentIndex == 5 ? FontWeight.w500 : null),
+            ),
+            items: [
+              PaneItem(
+                selectedTileColor:
+                ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
+                icon: const Icon(FluentIcons.database),
+                title: const Text('Estoque'),
+                body: Container(
+                  color: Colors.blue,
+                ),
+              ),
+              PaneItem(
+                icon: const Icon(FluentIcons.circle_dollar),
+                title: const Text('Preço Produto'),
+                body: Container(
+                  color: Colors.blue,
+                ),
+              ),
+            ],
+            body: SizedBox.shrink(
+              child: ProductView(context: context),
+            ),
+          ),
+          */
           PaneItem(
             selectedTileColor:
                 ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
@@ -166,6 +199,7 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
               child: ProductView(context: context),
             ),
           ),
+          
           /*==============================================
             Categorias
           ===============================================*/
