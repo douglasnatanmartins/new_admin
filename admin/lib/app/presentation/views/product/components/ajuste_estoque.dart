@@ -77,7 +77,8 @@ class _AjusteEstoqueState extends State<AjusteEstoque> {
                                                     '${e.codigo!} - ${e.descricao!}',
                                               ))
                                           .toList(),
-                                      placeholder: 'Produto *',
+                                      title: 'Produto *',
+                                      placeholder: 'Selecione o Produto',
                                       validator: validatorSugestion,
                                       onChanged: (text, textReason) {
                                         //print(text);
@@ -106,7 +107,8 @@ class _AjusteEstoqueState extends State<AjusteEstoque> {
                                                 label: e,
                                               ))
                                           .toList(),
-                                      placeholder: 'Tipo Ajuste Estoque *',
+                                      title: 'Tipo Ajuste Estoque *',
+                                      placeholder: 'Selecione o ajuste de estoque',
                                       validator: validatorSugestion,
                                       onSelected: (value) {
                                         if (value != null &&

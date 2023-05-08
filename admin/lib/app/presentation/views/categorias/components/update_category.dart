@@ -1,5 +1,6 @@
 import 'package:admin/app/domain/entities/category_entity.dart';
 import 'package:admin/app/presentation/controllers/category_controller.dart';
+import 'package:admin/app/presentation/widgets/custom_buttons/custom_buttom_status.dart';
 import 'package:admin/app/presentation/widgets/custom_dialogs/custom_alert_willpop.dart';
 import 'package:admin/app/presentation/widgets/custom_header/const_text_form.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_form_header.dart';
@@ -62,44 +63,22 @@ class UpdateCategory extends StatelessWidget {
                         ),
                       ),
                       _sizedBox(),
-                      Container(
-                        padding: const EdgeInsets.only(left: 10),
-                        width: 100,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Situação:',
-                              style: GoogleFonts.montserrat(
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Observer(
-                              builder: (_) {
-                                return ToggleSwitch(
-                                  checked: controller.situacao,
-                                  onChanged: (bool value) {
-                                    if (value) {
-                                      controller.setSituacao(true);
-                                    } else {
-                                      controller.setSituacao(false);
-                                    }
-                                  },
-                                  content: Text(
-                                    controller.situacao ? 'Ativo' : 'Inativo',
-                                    style: GoogleFonts.montserrat(
-                                        color: controller.situacao
-                                            ? Colors.grey
-                                            : Colors.red.darker,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                );
-                              },
-                            )
-                          ],
-                        ),
+                      Observer(
+                        builder: (_) {
+                          return CustomButtonStatus(
+                            checked: controller.situacao,
+                            onChanged: (bool value) {
+                              if (value) {
+                                controller.setSituacao(true);
+                              } else {
+                                controller.setSituacao(false);
+                              }
+                            },
+                          );
+                        }
                       ),
                       Container(
-                        padding:
-                            const EdgeInsets.only(left: 10, top: 20, right: 40),
+                        padding:const EdgeInsets.only(left: 10, top: 20, right: 40),
                         width: MediaQuery.of(context).size.width,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -134,7 +113,7 @@ class UpdateCategory extends StatelessWidget {
                                 style: GoogleFonts.montserrat(fontSize: 16),
                               ),
                               onPressed: () {
-                               CustomAlertWillPop.show(context: context);
+                                CustomAlertWillPop.show(context: context);
                               },
                             ),
                           ],

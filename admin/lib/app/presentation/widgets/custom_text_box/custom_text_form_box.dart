@@ -20,7 +20,8 @@ class CustomTextFormBox extends StatelessWidget {
       this.focusNode,
       this.errorText,
       this.width = 200,
-      this.children = 1, this.controller});
+      this.children = 1,
+      this.controller});
 
   final String title;
   final bool constainsInfo;
@@ -95,7 +96,11 @@ class CustomTextFormBox extends StatelessWidget {
                 controller: controller,
                 maxLines: maxLines,
                 focusNode: focusNode,
-                initialValue: initialValue,
+                initialValue: initialValue != null
+                    ? initialValue!.isEmpty
+                        ? 'Não Informado'
+                        : initialValue
+                    : null,
                 enabled: enabled,
                 placeholder: title,
                 style: GoogleFonts.roboto(
@@ -107,13 +112,13 @@ class CustomTextFormBox extends StatelessWidget {
                 inputFormatters: inputFormatters,
                 onChanged: onChanged,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.grey[200]
-                  ),
-                  boxShadow: [
-                  BoxShadow(
-                      color: Colors.grey[100], spreadRadius: 1, blurRadius: 30),
-                ]),
+                    border: Border.all(color: Colors.grey[200]),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey[100],
+                          spreadRadius: 1,
+                          blurRadius: 30),
+                    ]),
               )),
         ])
       ],

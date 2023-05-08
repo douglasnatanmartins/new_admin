@@ -233,6 +233,22 @@ mixin _$ProductController on _ProductControllerBase, Store {
     });
   }
 
+  late final _$situacaoAtom =
+      Atom(name: '_ProductControllerBase.situacao', context: context);
+
+  @override
+  bool get situacao {
+    _$situacaoAtom.reportRead();
+    return super.situacao;
+  }
+
+  @override
+  set situacao(bool value) {
+    _$situacaoAtom.reportWrite(value, super.situacao, () {
+      super.situacao = value;
+    });
+  }
+
   late final _$saveAsyncAction =
       AsyncAction('_ProductControllerBase.save', context: context);
 
@@ -401,6 +417,17 @@ mixin _$ProductController on _ProductControllerBase, Store {
   }
 
   @override
+  void setSituacao(bool value) {
+    final _$actionInfo = _$_ProductControllerBaseActionController.startAction(
+        name: '_ProductControllerBase.setSituacao');
+    try {
+      return super.setSituacao(value);
+    } finally {
+      _$_ProductControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 listCatgeorias: ${listCatgeorias},
@@ -416,7 +443,8 @@ category: ${category},
 observacao: ${observacao},
 qtdEstoque: ${qtdEstoque},
 valorCompra: ${valorCompra},
-valorVenda: ${valorVenda}
+valorVenda: ${valorVenda},
+situacao: ${situacao}
     ''';
   }
 }

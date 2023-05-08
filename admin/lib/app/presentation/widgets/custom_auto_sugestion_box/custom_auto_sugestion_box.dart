@@ -10,17 +10,20 @@ class CustomAutoSugestionBox<T> extends StatelessWidget {
       required this.placeholder,
       this.onSelected,
       this.inputFormatters,
-      this.validator, this.onChanged,
-      this.type = Object});
+      this.validator,
+      this.onChanged,
+      required this.title,
+      this.editing = false});
 
   final double? width;
   final List<AutoSuggestBoxItem<T>> list;
+  final String title;
   final String placeholder;
   final Function(AutoSuggestBoxItem<T>)? onSelected;
   final List<TextInputFormatter>? inputFormatters;
   final String? Function(String?)? validator;
   final Function(String, TextChangedReason)? onChanged;
-  final Object? type;
+  final bool editing;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +35,7 @@ class CustomAutoSugestionBox<T> extends StatelessWidget {
         children: [
           const SizedBox(height: 2),
           Text(
-            placeholder,
+            title,
             style: GoogleFonts.roboto(),
           ),
           const SizedBox(height: 7.6),
@@ -43,7 +46,12 @@ class CustomAutoSugestionBox<T> extends StatelessWidget {
                 fontSize: 14,
                 color: Colors.grey[180],
                 fontWeight: FontWeight.w700),
-            placeholderStyle: GoogleFonts.roboto(color: Colors.grey[120]),
+            placeholderStyle: !editing
+                ? GoogleFonts.roboto(color: Colors.grey[120])
+                : GoogleFonts.roboto(
+                    fontSize: 14,
+                    color: Colors.grey[180],
+                    fontWeight: FontWeight.w700),
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey[200]),
                 boxShadow: [

@@ -134,6 +134,12 @@ abstract class _ProductControllerBase with Store {
   @action
   void setValorVenda(String value) => valorVenda = value;
 
+  @observable
+  bool situacao = true;
+
+  @action
+  void setSituacao(bool value) => situacao = value;  
+
   Future<List<ProductEntity>> findAll(BuildContext context) async {
     final response = await _productUsecase.findAll();
     if (response.isLeft()) {
@@ -196,15 +202,15 @@ abstract class _ProductControllerBase with Store {
     final produto = ProductEntity(
         descricao: nameProduct,
         codigo: codeController.text,
-        embalagem: embalagem,
+        embalagem: embalagem ?? 'Não Informado',
         situacao: 1,
-        fabricante: fabricante,
+        fabricante: fabricante ?? 'Não Informado',
         idunidadeMedida: unidadeMedida!.idunidadeMedida,
         idCategoria: category!.idCategoria,
         quantidadeestoque: qtdStock,
         precocompra: num.tryParse(precoCompra.toString()),
         precovenda: num.tryParse(precovenda.toString()),
-        observacao: observacao ?? '');
+        observacao: observacao ?? 'Não Informado');
 
     final response = await _productUsecase.saveOrUpdate(produto);
     if (response.isLeft()) {
@@ -225,7 +231,6 @@ abstract class _ProductControllerBase with Store {
     return;
   }
 
-
   ///Validação de estoque
   bool validateTypeEntrada(
       BuildContext context, String typeMovimento, int stocKinit, int newStock) {
@@ -237,7 +242,7 @@ abstract class _ProductControllerBase with Store {
             message: 'O tipo de ajuste de estoque não permite que '
                 'o novo estoque seja menor que o estoque inicial. ');
         return false;
-      } 
+      }
       return true;
     } else {
       if (stocKinit < newStock) {
@@ -248,8 +253,32 @@ abstract class _ProductControllerBase with Store {
                 'o novo estoque seja menor que o estoque inicial, '
                 'pois pode implicar em estoque negativo (-).');
         return false;
-      } 
+      }
       return true;
     }
+  }
+
+  /*=============================================
+                  EDIÇÃO DO PRODUTO
+  =============================================== */
+
+  Future<void> getFunctionsEditing(BuildContext context) async {
+    await getCategorias(context);
+    await getUnidadeMedidas(context);
+    return;
+  }
+
+  void setInitialFunctions(ProductEntity product, CategoryEntity category,
+      UnidadeMedidaEntity unidadeMedida) {
+    setNameProduct(product.descricao!);
+    setEmbalagem(product.embalagem!);
+    setFabricante(product.fabricante!);
+    setQtdEstoque(product.quantidadeestoque.toString());
+    setValorCompra(product.precocompra!.toString());
+    setValorVenda(product.precovenda.toString());
+    setCategoria(category);
+    setUnidadeMedida(unidadeMedida);
+    setObservacao(product.observacao!);
+    setSituacao(product.situacao == 1 ? true : false);
   }
 }
