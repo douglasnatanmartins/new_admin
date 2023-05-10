@@ -16,9 +16,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:google_fonts/google_fonts.dart';
-
-import '../../../widgets/custom_dialogs/custom_alert_willpop.dart';
 
 class UpdateProduct extends StatelessWidget {
   UpdateProduct(
@@ -283,6 +280,7 @@ class UpdateProduct extends StatelessWidget {
                           if (_formKey.currentState!.validate()) {
                             await controller.update(
                                 context: context, productEntity: product);
+                            refres();
                           }
                         },
                       ),

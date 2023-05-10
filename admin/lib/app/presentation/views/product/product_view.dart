@@ -106,7 +106,7 @@ class _ProductViewState extends State<ProductView> {
                               padding: const EdgeInsets.all(4),
                               child: DatatableProdutos(
                                 list: snapshot.data!,
-                                refresh: () {},
+                                refresh: () => setState(() {}),
                               )),
                         );
                       }

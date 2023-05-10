@@ -43,7 +43,8 @@ class _ADDProductState extends State<ADDProduct> {
     final size = MediaQuery.of(context).size;
     return m.Dialog(
         backgroundColor: Colors.grey[30],
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10)),
         child: Container(
             margin: const EdgeInsets.all(16),
             width: size.width / 2.1,
@@ -189,8 +190,7 @@ class _ADDProductState extends State<ADDProduct> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Observer(
                                   builder: (_) {
-                                    return CustomAutoSugestionBox<
-                                        CategoryEntity>(
+                                    return CustomAutoSugestionBox<CategoryEntity>(
                                       width: size.width / 6.5,
                                       list: controller.listCatgeorias
                                           .map((e) => AutoSuggestBoxItem(
