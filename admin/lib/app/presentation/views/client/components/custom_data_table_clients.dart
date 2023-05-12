@@ -66,14 +66,14 @@ class CustomDatatableClients extends StatelessWidget {
         ),
       rows: list.map((e) {
         return PlutoRow(cells: {
-          'id': PlutoCell(value: e.idCliente),
-          'name': PlutoCell(value: e.nomeCliente),
+          'id': PlutoCell(value: e.idcliente),
+          'name': PlutoCell(value: e.nome),
           'email': PlutoCell(value: e.email),
           'status': PlutoCell(value: e.situacao! == 1 ? 'Ativo' : 'Inativo'),
           'phone': PlutoCell(value: e.telefone),
-          'createdAt': PlutoCell(value: '${e.createdAt!}'),
+          'createdAt': PlutoCell(value: '${e.createdat!}'),
           'updatedAt': PlutoCell(
-              value: e.updatedAt == null ? '' : '${e.updatedAt}'),
+              value: e.updatedat == null ? '' : '${e.updatedat}'),
           'edit': PlutoCell(),
         });
       }).toList(),

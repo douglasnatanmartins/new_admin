@@ -65,6 +65,7 @@ class _ProductViewState extends State<ProductView> {
                   ),
                   onPressed: () async {
                     CustomDialogMessage.show(
+                        btnOk: true,
                         context: context,
                         typeTitle: 2,
                         message: 'Desculpe, está é uma implementação Futura!');

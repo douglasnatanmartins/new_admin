@@ -7,8 +7,8 @@ class PhoneInputFormatter extends TextInputFormatter {
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
         var value = _prepareValue(newValue);
-        if(value.isNotEmpty && value.length <= 11){
-          value = _appendMask(value, '(##) # ####-####');  
+        if(value.isNotEmpty && value.length <= 16){
+          value = _appendMask(value, '## # ####-####');  
         } else if(value.length > 11){
           return oldValue;
         }
@@ -23,11 +23,13 @@ class PhoneInputFormatter extends TextInputFormatter {
 
   String _prepareValue(TextEditingValue newValue) {
       var value = newValue.text;
+  
       value = value.replaceAll(RegExp(r'[^\d]'), '');
       return value;
   }
 
   String _appendMask(String value, String mask) {
+    
     for (var i = 0; i < value.length; i++) {
       mask = mask.replaceFirst('#', value[i]);
     }

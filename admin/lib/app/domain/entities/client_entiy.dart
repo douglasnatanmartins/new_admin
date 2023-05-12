@@ -1,41 +1,40 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class ClientEntity {
-  int? idCliente;
-  int idEndereco;
-  String nomeCliente;
-  String? nomeFantasia;
-  int tipoCliente;
-  String cpfCnpj;
+  
+  int? idcliente;
+  int? idendereco;
+  String? nome;
+  String? nomefantasia;
+  String? cpfcnpj;
   String? email;
-  String telefone;
-  String? telefoneAdicional;
-  String? obs;
-  int situacao;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? telefone;
+  String? telefoneadic;
+  int? situacao;
+  int? tipocliente;
+  DateTime? createdat;
+  DateTime? updatedat;
 
   ClientEntity({
-    required this.idEndereco,
-    required this.nomeCliente,
-    required this.tipoCliente,
-    required this.cpfCnpj,
-    required this.telefone,
-    required this.situacao,
-    this.idCliente,
-    this.nomeFantasia,
+    this.idcliente,
+    this.idendereco,
+    this.nome,
+    this.nomefantasia,
+    this.cpfcnpj,
     this.email,
-    this.telefoneAdicional,
-    this.obs,
-    this.createdAt,
-    this.updatedAt,
+    this.telefone,
+    this.telefoneadic,
+    this.situacao,
+    this.tipocliente,
+    this.createdat,
+    this.updatedat,
   });
-
- 
 
   @override
   String toString() {
-    return 'ClientEntity(idCliente: $idCliente, idEndereco: $idEndereco, '
-    'nomeCliente: $nomeCliente, nomeFantasia: $nomeFantasia, tipoCliente: $tipoCliente, '
-    'cpfCnpj: $cpfCnpj, email: $email, telefone: $telefone, telefoneAdicional: $telefoneAdicional,'
-    ' obs: $obs, situacao: $situacao, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ClientEntity(idcliente: $idcliente, idendereco: $idendereco, '
+    'nome: $nome, nomefantasia: $nomefantasia, cpfcnpj: $cpfcnpj, '
+    'email: $email, telefone: $telefone, telefoneadic: $telefoneadic, '
+    'situacao: $situacao, tipocliente: $tipocliente, createdat: $createdat, '
+    'updatedat: $updatedat)';
   }
 }

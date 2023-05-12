@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:admin/app/presentation/controllers/client_controller.dart';
+import 'package:admin/app/presentation/views/client/components/add_client.dart';
 import 'package:admin/app/presentation/views/client/components/custom_data_table_clients.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_header.dart';
 import 'package:admin/app/presentation/widgets/custom_widgets/empty_data.dart';
@@ -16,9 +17,8 @@ class ClientView extends StatefulWidget {
 }
 
 class _ClientViewState extends State<ClientView> {
+  final ClientController _controller = GetIt.I<ClientController>();
 
- // final ClientController _controller = GetIt.I<ClientController>();
-  
   @override
   Widget build(BuildContext context) {
     return ScaffoldPage(
@@ -34,50 +34,49 @@ class _ClientViewState extends State<ClientView> {
             child: Row(
               children: [
                 FilledButton(
+                  style: ButtonStyle(
+                      backgroundColor: ButtonState.all(
+                          material.Colors.greenAccent.shade700)),
                   child: Text('+ Adicionar'.toUpperCase()),
-                  onPressed: () {},
+                  onPressed: () async {
+                    await material.showDialog(
+                        barrierDismissible: false,
+                        context: context,
+                        builder: (_) => ADDClients(
+                              refres: () => setState(() {}),
+                            ));
+                  },
                 ),
               ],
             ),
           ),
           const Padding(
-            padding: EdgeInsets.only(top: 20, bottom: 20),
-            child: Divider(),
-          ),
-          /*Expanded(
+              padding: EdgeInsets.only(top: 20, bottom: 20), child: Divider()),
+          Expanded(
             child: FutureBuilder(
-              future: _controller.getAll(context),
-              builder: (_, snapshot){
-              switch(snapshot.connectionState){
-                case ConnectionState.none:
-                case ConnectionState.waiting:
-                 return const Center(
-                      child: material.CircularProgressIndicator(),
-                    );
-                case ConnectionState.active:
-                case ConnectionState.done:
-                if(snapshot.data!.isEmpty){
-                  return const EmptyData();
-                } else {
-                  return CustomDatatableClients(
-                    list: snapshot.data!,
-                     controller: _controller,
-                      refresh: (value){
-          
-                      }
+                future: _controller.getAll(context),
+                builder: (_, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                    case ConnectionState.waiting:
+                      return const Center(
+                        child: material.CircularProgressIndicator(),
                       );
-                }
-          
-          
-              }
-            }),
+                    case ConnectionState.active:
+                    case ConnectionState.done:
+                      if (snapshot.data!.isEmpty) {
+                        return const EmptyData();
+                      } else {
+                        return CustomDatatableClients(
+                            list: snapshot.data!,
+                            controller: _controller,
+                            refresh: (value) {});
+                      }
+                  }
+                }),
           )
-          */
         ],
       ),
     );
   }
 }
-
-
-  

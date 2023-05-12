@@ -1,10 +1,14 @@
+// ignore_for_file: override_on_non_overriding_member
+
 import 'package:admin/app/presentation/controllers/login_controller.dart';
 import 'package:admin/app/presentation/widgets/custom_text_box/custom_text_box.dart';
+import 'package:admin/app/utils/shared_prefernces/shared_pref.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart' as m;
+import 'package:window_manager/window_manager.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -13,9 +17,21 @@ class LoginView extends StatefulWidget {
   State<LoginView> createState() => _LoginViewState();
 }
 
-class _LoginViewState extends State<LoginView> {
+class _LoginViewState extends State<LoginView> with WindowListener {
   final LoginController _controller = GetIt.I<LoginController>();
+
   final FocusNode _save = FocusNode();
+
+  void initState() {
+    windowManager.addListener(this);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -153,5 +169,38 @@ class _LoginViewState extends State<LoginView> {
         ],
       );
     });
+  }
+
+  @override
+  void onWindowClose() async {
+    bool _isPreventClose = await windowManager.isPreventClose();
+    if (_isPreventClose) {
+      showDialog(
+        context: context ,
+        builder: (_) {
+          return ContentDialog(
+            title: const Text('Confirmar fechamento'),
+            content:
+                const Text('Tem certeza de que deseja fechar a aplicação?'),
+            actions: [
+              FilledButton(
+                child: const Text('Sim'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  await SharedPref().removeInfoUser();
+                  await windowManager.destroy();
+                },
+              ),
+              Button(
+                child: const Text('Não'),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
   }
 }

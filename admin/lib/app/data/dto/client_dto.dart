@@ -1,62 +1,71 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // ignore_for_file: overridden_fields, annotate_overrides
 
 import 'package:admin/app/domain/entities/client_entiy.dart';
 
 class ClientDto extends ClientEntity {
-  int? idCliente;
-  String? nomeFantasia;
+  int? idcliente;
+  int? idendereco;
+  String? nome;
+  String? nomefantasia;
+  String? cpfcnpj;
   String? email;
-  String? telefoneAdicional;
-  String? obs;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+  String? telefone;
+  String? telefoneadic;
+  int? situacao;
+  int? tipocliente;
+  DateTime? createdat;
+  DateTime? updatedat;
 
-  ClientDto(
-      {required super.idEndereco,
-      required super.nomeCliente,
-      required super.tipoCliente,
-      required super.cpfCnpj,
-      required super.telefone,
-      required super.situacao,
-      this.idCliente,
-      this.nomeFantasia,
-      this.email,
-      this.telefoneAdicional,
-      this.obs,
-      this.createdAt,
-      this.updatedAt})
-      : super(
-            idCliente: idCliente,
-            nomeFantasia: nomeFantasia,
+  ClientDto({
+    this.idcliente,
+    this.idendereco,
+    this.nome,
+    this.nomefantasia,
+    this.cpfcnpj,
+    this.email,
+    this.telefone,
+    this.telefoneadic,
+    this.situacao,
+    this.tipocliente,
+    this.createdat,
+    this.updatedat,
+  }) : super(
+            idcliente: idcliente,
+            idendereco: idendereco,
+            nome: nome,
+            nomefantasia: nomefantasia,
+            cpfcnpj: cpfcnpj,
             email: email,
-            telefoneAdicional: telefoneAdicional,
-            obs: obs,
-            createdAt: createdAt,
-            updatedAt: updatedAt);
+            telefone: telefone,
+            telefoneadic: telefoneadic,
+            situacao: situacao,
+            tipocliente: tipocliente,
+            createdat: createdat,
+            updatedat: updatedat);
 
   factory ClientDto.fromMap(Map<String, dynamic> map) {
     return ClientDto(
-      idCliente: map['idcliente'] ?? 0,
-      idEndereco: map['idendereco'] as int,
-      nomeCliente: map['nomecliente'] as String,
-      tipoCliente: map['tipocliente'],
-      cpfCnpj: map['cpfcnpj'] as String,
+      idcliente: map['idcliente'] ?? 0,
+      idendereco: map['idendereco'] as int,
+      nome: map['nome'] as String,
+      tipocliente: map['tipocliente'],
+      cpfcnpj: map['cpfcnpj'] as String,
       telefone: map['telefone'] as String,
       situacao: map['situacao'] as int,
       email: map['email'] as String,
-      telefoneAdicional: map['telefoneadicional'] as String,
-      obs: map['obs'] as String,
-      createdAt: map['createdat'] as DateTime,
-      updatedAt: map['updatedat'] as DateTime,
+      telefoneadic: map['telefoneadic'] as String,
+      createdat: map['createdat'] as DateTime,
+      updatedat: map['updatedat'] as DateTime,
     );
   }
 
   @override
   String toString() {
-    return 'ClientDto(idCliente: $idCliente, idEndereco: ${super.idEndereco},'
-        'nomeCliente: ${super.nomeCliente},tipoCliente: ${super.tipoCliente}, '
-        'cpfCnpj:${super.cpfCnpj}, telefone:${super.telefone}, situacao:${super.situacao},'
-        ' nomeFantasia: $nomeFantasia, email: $email, telefoneAdicional: $telefoneAdicional, '
-        'obs: $obs, createdAt: $createdAt, updatedAt: $updatedAt)';
+    return 'ClientDto(idcliente: $idcliente, idendereco: $idendereco, '
+        'nome: $nome, nomefantasia: $nomefantasia, cpfcnpj: $cpfcnpj, '
+        'email: $email, telefone: $telefone, telefoneadic: $telefoneadic, '
+        'situacao: $situacao, tipocliente: $tipocliente, createdat: $createdat, '
+        'updatedat: $updatedat)';
   }
 }

@@ -9,8 +9,8 @@ class ClientUsecaseImp implements ClientUsecase {
   ClientUsecaseImp(this._clientRepository);
 
   @override
-  Future<Either<Failure, List<ClientEntity>>> getAll(bool? isActive) async {
-    return await _clientRepository.getAll(isActive);
+  Future<Either<Failure, List<ClientEntity>>> getAll({bool? isActive}) async {
+    return await _clientRepository.getAll(isActive: isActive);
   }
 
   @override
@@ -20,16 +20,16 @@ class ClientUsecaseImp implements ClientUsecase {
 
   @override
   Future<Either<Failure, bool>> saveOrUpdate(ClientEntity clientEntity) async {
-    if(clientEntity.idCliente == null || clientEntity.idCliente == null){
+    if(clientEntity.idcliente == null || clientEntity.idcliente == null){
       ///Salvando
-      if(clientEntity.nomeCliente == null || clientEntity.cpfCnpj == null
-      || clientEntity.idEndereco == null || clientEntity.situacao == null
+      if(clientEntity.nome == null || clientEntity.cpfcnpj == null
+      || clientEntity.idendereco == null || clientEntity.situacao == null
       || clientEntity.telefone == null){
 
         return Left(Failure('Existem campos nulos, contate o administrador!'));
       }
 
-      if(clientEntity.nomeCliente!.isEmpty|| clientEntity.cpfCnpj!.isEmpty
+      if(clientEntity.nome!.isEmpty|| clientEntity.cpfcnpj!.isEmpty
       || clientEntity.situacao! > 1 || clientEntity.situacao! < 0 || 
       clientEntity.telefone!.isEmpty){
 
@@ -40,14 +40,14 @@ class ClientUsecaseImp implements ClientUsecase {
 
     } else {
         ///EDITANDO
-        if( clientEntity.idCliente == null ||  clientEntity.nomeCliente == null
-         || clientEntity.cpfCnpj == null || clientEntity.idEndereco == null || 
+        if( clientEntity.idcliente == null ||  clientEntity.nome == null
+         || clientEntity.cpfcnpj == null || clientEntity.idendereco == null || 
          clientEntity.situacao == null || clientEntity.telefone == null){
 
           return Left(Failure('Existem campos nulos, contate o administrador!'));
         }
 
-        if(clientEntity.nomeCliente!.isEmpty|| clientEntity.cpfCnpj!.isEmpty
+        if(clientEntity.nome!.isEmpty|| clientEntity.cpfcnpj!.isEmpty
         || clientEntity.situacao! > 1 || clientEntity.situacao! < 0 || 
         clientEntity.telefone!.isEmpty){
           

@@ -9,8 +9,8 @@ class ClientRepositoryImp implements ClientRepository {
   ClientRepositoryImp(this._clientDataSource);
 
   @override
-  Future<Either<Failure, List<ClientEntity>>> getAll(bool? isActive) async {
-    return await _clientDataSource.getAll(isActive);
+  Future<Either<Failure, List<ClientEntity>>> getAll({bool? isActive}) async {
+    return await _clientDataSource.getAll(isActive: isActive);
   }
 
   @override
