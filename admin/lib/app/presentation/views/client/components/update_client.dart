@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:admin/app/domain/entities/cidade_estado_pais_entity.dart';
+import 'package:admin/app/domain/entities/client_entiy.dart';
+import 'package:admin/app/domain/entities/endereco_entity.dart';
 import 'package:admin/app/presentation/controllers/client_controller.dart';
 import 'package:admin/app/presentation/widgets/custom_auto_sugestion_box/custom_auto_sugestion_box.dart';
 import 'package:admin/app/presentation/widgets/custom_buttons/custon_row_button_save.dart';
@@ -15,27 +17,19 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/material.dart' as m;
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get_it/get_it.dart';
 
-class ADDClients extends StatefulWidget {
-  const ADDClients({super.key, required this.refres});
+class UpdateClients extends StatelessWidget {
+  UpdateClients(
+      {super.key,
+      required this.refres,
+      required this.controller,
+      required this.clientEntity, required this.enderecoEntity});
 
   final Function() refres;
-
-  @override
-  State<ADDClients> createState() => _ADDClientsState();
-}
-
-class _ADDClientsState extends State<ADDClients> {
   final _formKey = GlobalKey<FormState>();
-
-  final controller = GetIt.I<ClientController>();
-
-  @override
-  Future<void> didChangeDependencies() async {
-    await controller.getAllEstados(context);
-    super.didChangeDependencies();
-  }
+  final ClientController controller;
+  final ClientEntity clientEntity;
+  final EnderecoEntity enderecoEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +58,7 @@ class _ADDClientsState extends State<ADDClients> {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: clientEntity.nome,
                                 width: size.width / 3.4,
                                 title: 'Nome Completo / Razão Social *',
                                 validator: validator,
@@ -73,6 +68,7 @@ class _ADDClientsState extends State<ADDClients> {
                             Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: CustomTextFormBox(
+                                  initialValue: clientEntity.email,
                                   width: size.width / 3.43,
                                   title: 'Email * ',
                                   validator: (text) => validatorEmail(text),
@@ -89,6 +85,7 @@ class _ADDClientsState extends State<ADDClients> {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: clientEntity.nomefantasia,
                                 width: size.width / 7,
                                 title: 'Nome Fantasia',
                                 onChanged: controller.setNomeFantasia,
@@ -97,6 +94,7 @@ class _ADDClientsState extends State<ADDClients> {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: clientEntity.cpfcnpj,
                                 width: size.width / 7,
                                 title: 'CPF / CNPJ * ',
                                 inputFormatters: [
@@ -104,12 +102,13 @@ class _ADDClientsState extends State<ADDClients> {
                                   CNPJAndCPFInputFormat()
                                 ],
                                 validator: (text) => validatorCPFCNPJ(text),
-                                 onChanged: controller.setCpfCNPJ,
+                                onChanged: controller.setCpfCNPJ,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: clientEntity.telefone,
                                 width: size.width / 7,
                                 title: 'Telefone Celular * ',
                                 inputFormatters: [
@@ -117,12 +116,13 @@ class _ADDClientsState extends State<ADDClients> {
                                   PhoneInputFormatter()
                                 ],
                                 validator: validator,
-                                 onChanged: controller.setTelefone,
+                                onChanged: controller.setTelefone,
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: clientEntity.telefoneadic,
                                 width: size.width / 7,
                                 title: 'Telefone Adicional',
                                 onChanged: controller.setTelefoneAdic,
@@ -143,6 +143,7 @@ class _ADDClientsState extends State<ADDClients> {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: enderecoEntity.cep,
                                 width: size.width / 7,
                                 title: 'CEP *',
                                 validator: validator,
@@ -157,22 +158,25 @@ class _ADDClientsState extends State<ADDClients> {
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Observer(
                                   builder: (_) {
-                                    return CustomAutoSugestionBox<CidadeEstadoPaisEntity>(
+                                    return CustomAutoSugestionBox<
+                                        CidadeEstadoPaisEntity>(
                                       width: size.width / 7,
-                                      list:controller.listEstados
+                                      list: controller.listEstados
                                           .map((e) => AutoSuggestBoxItem(
                                                 value: e,
                                                 label: e.nomeestado!,
                                               ))
                                           .toList(),
                                       title: 'Estado *',
-                                      placeholder: 'selecione...',
+                                      placeholder: enderecoEntity.nomeestado != null ?
+                                      enderecoEntity.nomeestado! :'selecione...',
                                       validator: validatorSugestion,
                                       onSelected: (value) async {
                                         if (value.value != null) {
-                                          if(value.value!.idestado != null){
+                                          if (value.value!.idestado != null) {
                                             controller.setEstado(value.value!);
-                                            await controller.loadCidade(context, value.value!.idestado!);
+                                            await controller.loadCidade(context,
+                                                value.value!.idestado!);
                                           }
                                           //controller.setUnidadeMedida(value.value!);
                                         }
@@ -180,7 +184,7 @@ class _ADDClientsState extends State<ADDClients> {
                                     );
                                   },
                                 )),
-                                Padding(
+                            Padding(
                                 padding: const EdgeInsets.only(left: 10),
                                 child: Observer(
                                   builder: (_) {
@@ -194,7 +198,8 @@ class _ADDClientsState extends State<ADDClients> {
                                               ))
                                           .toList(),
                                       title: 'Cidade *',
-                                      placeholder: 'selecione...',
+                                      placeholder: enderecoEntity.nomecidade != null ? enderecoEntity.nomecidade! :
+                                       'selecione...',
                                       validator: validatorSugestion,
                                       onSelected: (value) {
                                         if (value != null) {
@@ -247,9 +252,9 @@ class _ADDClientsState extends State<ADDClients> {
                         width: size.width,
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                             await controller.save(context: context).then((_) {
-                               widget.refres();
-                             });
+                            await controller.save(context: context).then((_) {
+                             // widget.refres();
+                            });
                           }
                         },
                       ),
@@ -298,9 +303,9 @@ class _ADDClientsState extends State<ADDClients> {
   String? validatorCPFCNPJ(String? text) {
     if (text == null || text.isEmpty) {
       return 'Campo Obrigatório';
-    } else if(text.length <= 13) {
+    } else if (text.length <= 13) {
       return 'CPF é inválido';
-    } else if(text.length > 14 && text.length <= 17){
+    } else if (text.length > 14 && text.length <= 17) {
       return 'CNPJ é inválido';
     } else {
       return null;

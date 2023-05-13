@@ -157,6 +157,8 @@ abstract class _ClientControllerBase with Store {
 
   @action
   Future<bool> save({required BuildContext context}) async {
+    await CustomDialog.loading(context: context, title: 'Salvando...');
+
     final endereco = EnderecoEntity(
         idcidade: cidade!.idcidade!,
         nomecidade: cidade!.nomecidade,
@@ -169,8 +171,17 @@ abstract class _ClientControllerBase with Store {
         tipoendereco: 1,
         numero: numero ?? 'Não Informado');
 
+
+    final result = await _enderecoUsecase.saveOrUpdate(endereco);
+
+    if (result.isLeft()) {
+      CustomDialog.dismiss(context);
+      CustomSnackbar.show(cxt: context, message: result.getLeft().message);
+      return false;
+    }
+
     final cliente = ClientEntity(
-        idendereco: 0,
+        idendereco: result.getRight(),
         nome: nomeCliente,
         email: email,
         nomefantasia: nomeFantasia ?? 'Não Informado',
@@ -180,9 +191,26 @@ abstract class _ClientControllerBase with Store {
         tipocliente: cpfcnpj!.length > 14 ? 2 : 1,
         situacao: 1);
 
-    print(endereco);
-    print(cliente);
-    final result = await _enderecoUsecase.saveOrUpdate(endereco);
-    return false;
+    final resultClient = await _clientUsecase.saveOrUpdate(cliente);
+
+    if (resultClient.isLeft()) {
+      CustomDialog.dismiss(context);
+      CustomSnackbar.show(
+          cxt: context, message: resultClient.getLeft().message);
+      return false;
+    }
+    //
+    
+    await Future.delayed(const Duration(seconds: 1), () async {
+      CustomDialog.dismiss(context);
+      await CustomSnackbar.show(
+          cxt: context,
+          message: 'Registro Salvo',
+          severity: InfoBarSeverity.success);
+      Navigator.of(context).pop();
+      return true;
+    });
+
+    return true;
   }
 }

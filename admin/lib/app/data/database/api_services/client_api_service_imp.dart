@@ -62,8 +62,37 @@ class ClientApiServiceImp implements ClientDataSource {
   }
 
   @override
-  Future<Either<Failure, bool>> saveOrUpdate(ClientEntity clientEntity) {
-    // TODO: implement saveOrUpdate
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> saveOrUpdate(ClientEntity cliente) async {
+    String? body;
+    const path = 'clientes/createorupdate';
+
+    ///Novo Produto
+    if (cliente.idcliente == null) {
+      body = json.encode(ClientDto().toMap(cliente, edit: false));
+      ///
+    } else {
+      // Editando Produto
+      body = json.encode(ClientDto().toMap(cliente, edit: true));
+    }
+
+    try {
+      final url = Uri.http(URL, path);
+
+      var response = await http.post(url,
+          headers: ALL_HEADERS(user.userEntity!.sessionToken!), body: body);
+
+      if (response.statusCode == 200) {
+        return const Right(true);
+      } else {
+        final responseMap = json.decode(response.body);
+        return Left(Failure(responseMap['error'].toString()));
+      }
+    } on HttpException catch (e) {
+      debugPrint('HTTP ERROR: ${e.message}');
+      return Left(Failure(e.message));
+    } catch (e) {
+      debugPrint('ERROR NORMAL: $e');
+      return Left(Failure(e.toString()));
+    }
   }
 }

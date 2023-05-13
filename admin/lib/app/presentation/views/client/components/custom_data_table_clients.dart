@@ -1,8 +1,9 @@
-
 import 'package:admin/app/domain/entities/client_entiy.dart';
 import 'package:admin/app/presentation/controllers/client_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:admin/app/presentation/widgets/custom_buttons/button_edit.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:flutter/material.dart' as m;
 
 class CustomDatatableClients extends StatelessWidget {
   CustomDatatableClients(
@@ -17,119 +18,125 @@ class CustomDatatableClients extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PlutoGrid(
-      rowColorCallback: (PlutoRowColorContext rowColorContext) {
+    return m.Material(
+      child: PlutoGrid(
+        rowColorCallback: (PlutoRowColorContext rowColorContext) {
           return rowColorContext.row.cells['status']?.value == 'Inativo'
-      ? Colors.red.withOpacity(0.5)
-      : Colors.white;
-      },
-      columns: columns
-        ..add(
-          PlutoColumn(
-              title: 'Ações',
-              field: 'edit',
-              type: PlutoColumnType.text(),
-              readOnly: true,
-              enableEditingMode: false,
-              width: 100,
-              minWidth: 75,
-              renderer: (renderContext) {
-                return ElevatedButton(
-                     style: ElevatedButton.styleFrom(
-                        backgroundColor: renderContext.row.cells.entries.elementAt(5).value.value
-                        == 'Inativo' ? Colors.blue :  Colors.yellow.shade900),
-                    onPressed: () async {
-                      /*
-                      final ClientModel clientModel = list.firstWhere((e) =>
-                          e.idcliente == renderContext.row.cells.entries.elementAt(0).value.value);
+              ? Colors.red.withOpacity(0.5)
+              : Colors.white;
+        },
+        columns: columns
+          ..add(
+            PlutoColumn(
+                title: 'Ações',
+                field: 'edit',
+                type: PlutoColumnType.text(),
+                enableEditingMode: false,
+                width: 75,
+                minWidth: 75,
+                renderer: (renderContext) {
+                  return CustomButtonEdit(
+                onPressed: () async {
+                  /*
+                  final ProductEntity productEntity = list.firstWhere((e) =>
+                    e.idProduto == renderContext.row.cells.entries.
+                    elementAt(0).value.value as int);
 
-                      final AddressModel? addressModel = await AddressRepository()
-                              .getAddressByIdUser(clientModel.idcliente!);
+                    final controller = GetIt.I<ProductController>();
+                    await controller.getFunctionsEditing(context).then((_) async {
 
-                      if (addressModel != null) {
-                        controller.setInitialValue(
-                            clientModel: clientModel,
-                            addressModel: addressModel);
-                        await showDialog<bool>(
-                            context: context,
-                            builder: (_) => UpdateClient(
-                                  controller: controller,
-                                  clientModel: clientModel,
-                                  addressModel: addressModel,
-                                  refresh: refresh,
-                                ));
-                      }
-                      */
-                    },
-                    child: const Text('Editar'));
-              }),
-        ),
-      rows: list.map((e) {
-        return PlutoRow(cells: {
-          'id': PlutoCell(value: e.idcliente),
-          'name': PlutoCell(value: e.nome),
-          'email': PlutoCell(value: e.email),
-          'status': PlutoCell(value: e.situacao! == 1 ? 'Ativo' : 'Inativo'),
-          'phone': PlutoCell(value: e.telefone),
-          'createdAt': PlutoCell(value: '${e.createdat!}'),
-          'updatedAt': PlutoCell(
-              value: e.updatedat == null ? '' : '${e.updatedat}'),
-          'edit': PlutoCell(),
-        });
-      }).toList(),
-      configuration: PlutoGridConfiguration(
-        scrollbar: const PlutoGridScrollbarConfig(
-          
-        ),
-        columnFilter: PlutoGridColumnFilterConfig(
-          filters: const [
-            ...FilterHelper.defaultFilters,
-            // custom filter
-            ClassYouImplemented(),
-          ],
-          resolveDefaultColumnFilter: (column, resolver) {
-            if (column.field == 'text') {
+                    final category = controller.listCatgeorias.firstWhereOrNull(
+                      (c) => c.idCategoria == productEntity.idCategoria);
+
+                    final unitM = controller.listUniMedidas.firstWhereOrNull((u) =>
+                      u.idunidadeMedida == productEntity.idunidadeMedida);
+
+                    productEntity.descUnidadeMedida = unitM != null ? unitM.descricao : 'NÃO ENCONTRADO';
+                    productEntity.descCategoria = category != null ?  category.descricao : 'NÃO ENCONTRADO';
+
+                    controller.setInitialFunctions(
+                      productEntity,category ??  CategoryEntity(idCategoria: 0),
+                      unitM ?? UnidadeMedidaEntity(idunidadeMedida: 0));
+
+                      await m.showDialog<bool>(
+                          barrierDismissible: false,
+                          context: context,
+                          builder: (_) => UpdateProduct(
+                                controller: controller,
+                                product: productEntity,
+                                refres: refresh,
+                              ));
+                    });
+                    */
+                  },
+                );
+                }),
+          ),
+        rows: list.map((e) {
+          return PlutoRow(cells: {
+            'id': PlutoCell(value: e.idcliente),
+            'name': PlutoCell(value: e.nome),
+            'email': PlutoCell(value: e.email),
+            'status': PlutoCell(value: e.situacao! == 1 ? 'Ativo' : 'Inativo'),
+            'type': PlutoCell(value: e.tipocliente! == 1 ? 'Pessoa Fisica' : 'Pessoa Juridica'),
+            'phone': PlutoCell(value: e.telefone),
+            'createdAt': PlutoCell(value: '${e.createdat!}'),
+            'updatedAt': PlutoCell(value: e.updatedat == null ? '' : '${e.updatedat}'),
+            'edit': PlutoCell(),
+          });
+        }).toList(),
+        configuration: PlutoGridConfiguration(
+          scrollbar: const PlutoGridScrollbarConfig(),
+          columnFilter: PlutoGridColumnFilterConfig(
+            filters: const [
+              ...FilterHelper.defaultFilters,
+              // custom filter
+              ClassYouImplemented(),
+            ],
+            resolveDefaultColumnFilter: (column, resolver) {
+              if (column.field == 'text') {
+                return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
+              } else if (column.field == 'number') {
+                return resolver<PlutoFilterTypeGreaterThan>()
+                    as PlutoFilterType;
+              } else if (column.field == 'date') {
+                return resolver<PlutoFilterTypeLessThan>() as PlutoFilterType;
+              } else if (column.field == 'select') {
+                return resolver<ClassYouImplemented>() as PlutoFilterType;
+              }
               return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-            } else if (column.field == 'number') {
-              return resolver<PlutoFilterTypeGreaterThan>() as PlutoFilterType;
-            } else if (column.field == 'date') {
-              return resolver<PlutoFilterTypeLessThan>() as PlutoFilterType;
-            } else if (column.field == 'select') {
-              return resolver<ClassYouImplemented>() as PlutoFilterType;
-            }
-            return resolver<PlutoFilterTypeContains>() as PlutoFilterType;
-          },
+            },
+          ),
         ),
+        onLoaded: (PlutoGridOnLoadedEvent event) {
+          event.stateManager.setShowColumnFilter(true);
+        },
       ),
-      onLoaded: (PlutoGridOnLoadedEvent event) {
-        event.stateManager.setShowColumnFilter(true);
-        
-      },
     );
   }
 
   final List<PlutoColumn> columns = <PlutoColumn>[
     PlutoColumn(
-        width: 120,
-        title: 'Id Usuario',
-        field: 'id',
-        type: PlutoColumnType.text(),
-        enableFilterMenuItem: false,
-        ),
+      width: 80,
+      title: 'ID',
+      field: 'id',
+      type: PlutoColumnType.text(),
+      enableFilterMenuItem: false,
+    ),
     PlutoColumn(
-        width: 200,
-        title: 'Nome',
-        field: 'name',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-        ),
+      width: 210,
+      title: 'Nome',
+      field: 'name',
+      type: PlutoColumnType.text(),
+      enableEditingMode: false,
+    ),
     PlutoColumn(
-        width: 260,
-        title: 'E-mail',
-        field: 'email',
-        type: PlutoColumnType.text(),
-        enableEditingMode: false,
-       ),
+      width: 210,
+      title: 'E-mail',
+      field: 'email',
+      type: PlutoColumnType.text(),
+      enableEditingMode: false,
+    ),
     PlutoColumn(
         width: 160,
         title: 'Telefone',
@@ -137,16 +144,22 @@ class CustomDatatableClients extends StatelessWidget {
         type: PlutoColumnType.text(),
         enableEditingMode: false),
     PlutoColumn(
-        width: 110,
+        width: 100,
         title: 'Situação',
         field: 'status',
+        type: PlutoColumnType.text(),
+        enableEditingMode: false),
+    PlutoColumn(
+        width: 130,
+        title: 'Tipo Pessoa',
+        field: 'type',
         type: PlutoColumnType.text(),
         enableEditingMode: false),
     PlutoColumn(
         width: 150,
         title: 'Data Atualização',
         field: 'updatedAt',
-        type: PlutoColumnType.date(format: 'dd-MM-yyyy'),
+        type: PlutoColumnType.date(format: 'dd/MM/yyyy'),
         enableEditingMode: false),
   ];
 }

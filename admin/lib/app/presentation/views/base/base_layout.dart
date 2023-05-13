@@ -35,13 +35,14 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
     return NavigationView(
       pane: NavigationPane(
         size: NavigationPaneSize(
-            openMaxWidth: MediaQuery.of(context).size.width * 0.18),
+        openMaxWidth: MediaQuery.of(context).size.width * 0.18),
         selected: currentIndex,
         onChanged: (index) {
           setState(() {
             currentIndex = index;
           });
         },
+        
         header: SizedBox(
             height: MediaQuery.of(context).size.height * 0.18,
             width: MediaQuery.of(context).size.width,
@@ -135,57 +136,8 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
             ),
           ),
           /*==============================================
-            Usuarios
-          ===============================================*/
-          PaneItem(
-            selectedTileColor:
-                ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
-            icon: const Icon(FluentIcons.user_window),
-            title: Text(
-              'Usuarios',
-              style: GoogleFonts.montserrat(
-                  fontWeight: currentIndex == 4 ? FontWeight.w500 : null),
-            ),
-            body: SizedBox.shrink(
-              child: Container(color: Colors.purple),
-            ),
-          ),
-          /*==============================================
             Produtos
           ===============================================*/
-         /* PaneItemExpander(
-            trailing: Icon(FluentIcons.chevron_down, size: 10, color: Colors.grey[10],),
-            icon: const Icon(FluentIcons.product_catalog),
-            selectedTileColor:
-                ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
-            title: Text(
-              'Produtos',
-              style: GoogleFonts.montserrat(
-                  fontWeight: currentIndex == 5 ? FontWeight.w500 : null),
-            ),
-            items: [
-              PaneItem(
-                selectedTileColor:
-                ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
-                icon: const Icon(FluentIcons.database),
-                title: const Text('Estoque'),
-                body: Container(
-                  color: Colors.blue,
-                ),
-              ),
-              PaneItem(
-                icon: const Icon(FluentIcons.circle_dollar),
-                title: const Text('Preço Produto'),
-                body: Container(
-                  color: Colors.blue,
-                ),
-              ),
-            ],
-            body: SizedBox.shrink(
-              child: ProductView(context: context),
-            ),
-          ),
-          */
           PaneItem(
             selectedTileColor:
                 ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
@@ -199,7 +151,6 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
               child: ProductView(context: context),
             ),
           ),
-          
           /*==============================================
             Categorias
           ===============================================*/
@@ -216,6 +167,22 @@ class _BaseLayoutState extends State<BaseLayout> with WindowListener {
               child: CategoryView(
                 context: context,
               ),
+            ),
+          ),
+          /*==============================================
+            Usuarios
+          ===============================================*/
+          PaneItem(
+            selectedTileColor:
+                ButtonState.all(const Color(0xff303742).withOpacity(0.5)),
+            icon: const Icon(FluentIcons.user_window),
+            title: Text(
+              'Usuarios',
+              style: GoogleFonts.montserrat(
+                  fontWeight: currentIndex == 4 ? FontWeight.w500 : null),
+            ),
+            body: SizedBox.shrink(
+              child: Container(color: Colors.purple),
             ),
           ),
           PaneItemSeparator(color: Colors.grey[140]),

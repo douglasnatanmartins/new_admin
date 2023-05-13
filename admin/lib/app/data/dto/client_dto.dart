@@ -44,6 +44,34 @@ class ClientDto extends ClientEntity {
             createdat: createdat,
             updatedat: updatedat);
 
+  Map<String, dynamic> toMap(ClientEntity cliente, {bool? edit = false}) {
+    if (edit!) {
+      return <String, dynamic>{
+        'idcliente': cliente.idcliente,
+        'idendereco': cliente.idendereco,
+        'nome': cliente.nome,
+        'nomefantasia': cliente.nomefantasia,
+        'cpfcnpj': cliente.cpfcnpj,
+        'email': cliente.email,
+        'telefone': cliente.telefone,
+        'telefoneadic': cliente.telefoneadic,
+        'situacao': cliente.situacao,
+        'tipocliente': cliente.tipocliente,
+      };
+    }
+    return <String, dynamic>{
+      'idendereco': cliente.idendereco,
+      'nome': cliente.nome,
+      'nomefantasia': cliente.nomefantasia,
+      'cpfcnpj': cliente.cpfcnpj,
+      'email': cliente.email,
+      'telefone': cliente.telefone,
+      'telefoneadic': cliente.telefoneadic,
+      'situacao': cliente.situacao,
+      'tipocliente': cliente.tipocliente,
+    };
+  }
+
   factory ClientDto.fromMap(Map<String, dynamic> map) {
     return ClientDto(
       idcliente: map['idcliente'] ?? 0,
@@ -55,8 +83,8 @@ class ClientDto extends ClientEntity {
       situacao: map['situacao'] as int,
       email: map['email'] as String,
       telefoneadic: map['telefoneadic'] as String,
-      createdat: map['createdat'] as DateTime,
-      updatedat: map['updatedat'] as DateTime,
+      createdat: map['createdat'] != null ? DateTime.parse(map['createdat']) : null,
+      updatedat:map['updatedat'] != null ? DateTime.parse(map['updatedat']) : null,
     );
   }
 

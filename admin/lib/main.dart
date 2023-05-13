@@ -70,6 +70,8 @@ class MyApp extends StatelessWidget {
             visualDensity: VisualDensity.standard,
             cardColor: const Color(0xFFFFFFFF),
             navigationPaneTheme: NavigationPaneThemeData(
+              animationCurve: Curves.bounceOut,
+              animationDuration: Duration.zero,
               backgroundColor: const Color(0XFF171e29),
              selectedTextStyle:ButtonState.all(GoogleFonts.montserrat(
               fontWeight: FontWeight.bold,

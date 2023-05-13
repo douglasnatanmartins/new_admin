@@ -51,10 +51,12 @@ class EnderecoApiServiceImp implements EnderecoDatasource {
       var response = await http.post(url,
           headers: ALL_HEADERS(user.userEntity!.sessionToken!), body: body);
 
+      final responseMap = json.decode(response.body);
+
       if (response.statusCode == 200) {
-        return const Right(1);
+
+        return Right(int.parse(responseMap['response']));
       } else {
-        final responseMap = json.decode(response.body);
         return Left(Failure(responseMap['error'].toString()));
       }
     } on HttpException catch (e) {
