@@ -233,6 +233,22 @@ mixin _$ClientController on _ClientControllerBase, Store {
     });
   }
 
+  late final _$situacaoAtom =
+      Atom(name: '_ClientControllerBase.situacao', context: context);
+
+  @override
+  bool get situacao {
+    _$situacaoAtom.reportRead();
+    return super.situacao;
+  }
+
+  @override
+  set situacao(bool value) {
+    _$situacaoAtom.reportWrite(value, super.situacao, () {
+      super.situacao = value;
+    });
+  }
+
   late final _$getAllAsyncAction =
       AsyncAction('_ClientControllerBase.getAll', context: context);
 
@@ -273,6 +289,30 @@ mixin _$ClientController on _ClientControllerBase, Store {
   @override
   Future<bool> save({required BuildContext context}) {
     return _$saveAsyncAction.run(() => super.save(context: context));
+  }
+
+  late final _$getEnderecoByIDAsyncAction =
+      AsyncAction('_ClientControllerBase.getEnderecoByID', context: context);
+
+  @override
+  Future<EnderecoEntity?> getEnderecoByID(
+      BuildContext context, int idendereco) {
+    return _$getEnderecoByIDAsyncAction
+        .run(() => super.getEnderecoByID(context, idendereco));
+  }
+
+  late final _$updateAsyncAction =
+      AsyncAction('_ClientControllerBase.update', context: context);
+
+  @override
+  Future<bool> update(
+      {required BuildContext context,
+      required ClientEntity clientEntity,
+      required EnderecoEntity enderecoEntity}) {
+    return _$updateAsyncAction.run(() => super.update(
+        context: context,
+        clientEntity: clientEntity,
+        enderecoEntity: enderecoEntity));
   }
 
   late final _$_ClientControllerBaseActionController =
@@ -433,6 +473,17 @@ mixin _$ClientController on _ClientControllerBase, Store {
   }
 
   @override
+  void setSituacao(bool value) {
+    final _$actionInfo = _$_ClientControllerBaseActionController.startAction(
+        name: '_ClientControllerBase.setSituacao');
+    try {
+      return super.setSituacao(value);
+    } finally {
+      _$_ClientControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 nomeCliente: ${nomeCliente},
@@ -448,7 +499,8 @@ bairro: ${bairro},
 rua: ${rua},
 numero: ${numero},
 listEstados: ${listEstados},
-listCidades: ${listCidades}
+listCidades: ${listCidades},
+situacao: ${situacao}
     ''';
   }
 }

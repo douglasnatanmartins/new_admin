@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:admin/app/domain/entities/client_entiy.dart';
 import 'package:admin/app/presentation/controllers/client_controller.dart';
+import 'package:admin/app/presentation/views/client/components/update_client.dart';
 import 'package:admin/app/presentation/widgets/custom_buttons/button_edit.dart';
+import 'package:admin/app/presentation/widgets/custom_dialogs/custom_dialog_message.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:flutter/material.dart' as m;
@@ -14,7 +18,7 @@ class CustomDatatableClients extends StatelessWidget {
 
   final List<ClientEntity> list;
   final ClientController controller;
-  final Function(bool) refresh;
+  final Function refresh;
 
   @override
   Widget build(BuildContext context) {
@@ -36,40 +40,40 @@ class CustomDatatableClients extends StatelessWidget {
                 minWidth: 75,
                 renderer: (renderContext) {
                   return CustomButtonEdit(
-                onPressed: () async {
-                  /*
-                  final ProductEntity productEntity = list.firstWhere((e) =>
-                    e.idProduto == renderContext.row.cells.entries.
-                    elementAt(0).value.value as int);
+                    onPressed: () async {
+                      //Encontrando o Cliente na lista
+                      final ClientEntity clientEntity = list.firstWhere((e) =>
+                          e.idcliente ==renderContext.row.cells.entries.elementAt(0)
+                              .value.value as int);
 
-                    final controller = GetIt.I<ProductController>();
-                    await controller.getFunctionsEditing(context).then((_) async {
-
-                    final category = controller.listCatgeorias.firstWhereOrNull(
-                      (c) => c.idCategoria == productEntity.idCategoria);
-
-                    final unitM = controller.listUniMedidas.firstWhereOrNull((u) =>
-                      u.idunidadeMedida == productEntity.idunidadeMedida);
-
-                    productEntity.descUnidadeMedida = unitM != null ? unitM.descricao : 'NÃO ENCONTRADO';
-                    productEntity.descCategoria = category != null ?  category.descricao : 'NÃO ENCONTRADO';
-
-                    controller.setInitialFunctions(
-                      productEntity,category ??  CategoryEntity(idCategoria: 0),
-                      unitM ?? UnidadeMedidaEntity(idunidadeMedida: 0));
-
-                      await m.showDialog<bool>(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (_) => UpdateProduct(
-                                controller: controller,
-                                product: productEntity,
-                                refres: refresh,
-                              ));
-                    });
-                    */
-                  },
-                );
+                      ///Consultando o Endereço        
+                      await controller.getEnderecoByID(context, clientEntity.idendereco!)
+                          .then((endereco) async {
+                            await controller.getAllEstados(context);
+                            //
+                              if (endereco != null) {
+                                //Inicializando SETTERS
+                                controller.initializeFunction(
+                                    client: clientEntity, endereco: endereco);
+                                //Chamando o Dialogo de Edição
+                                await m.showDialog<bool>(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (_) => UpdateClients(
+                                          controller: controller,
+                                          refresh: refresh,
+                                          clientEntity: clientEntity,
+                                          enderecoEntity: endereco,
+                                        ));
+                                //
+                              } else {
+                                CustomDialogMessage.show(
+                                    context: context,
+                                    message:'Endereço não encontrado para o Cliente');
+                              }
+                      });
+                    },
+                  );
                 }),
           ),
         rows: list.map((e) {
@@ -78,10 +82,13 @@ class CustomDatatableClients extends StatelessWidget {
             'name': PlutoCell(value: e.nome),
             'email': PlutoCell(value: e.email),
             'status': PlutoCell(value: e.situacao! == 1 ? 'Ativo' : 'Inativo'),
-            'type': PlutoCell(value: e.tipocliente! == 1 ? 'Pessoa Fisica' : 'Pessoa Juridica'),
+            'type': PlutoCell(
+                value:
+                    e.tipocliente! == 1 ? 'Pessoa Fisica' : 'Pessoa Juridica'),
             'phone': PlutoCell(value: e.telefone),
             'createdAt': PlutoCell(value: '${e.createdat!}'),
-            'updatedAt': PlutoCell(value: e.updatedat == null ? '' : '${e.updatedat}'),
+            'updatedAt':
+                PlutoCell(value: e.updatedat == null ? '' : '${e.updatedat}'),
             'edit': PlutoCell(),
           });
         }).toList(),

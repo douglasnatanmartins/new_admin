@@ -23,26 +23,35 @@ class EnderecoApiServiceImp implements EnderecoDatasource {
   }
 
   @override
-  Future<Either<Failure, EnderecoEntity>> getClientById(int id) {
-    // TODO: implement getClientById
-    throw UnimplementedError();
+  Future<Either<Failure, EnderecoEntity>> getClientById(int id) async{
+
+    final url = Uri.http(URL, 'enderecos/getAddress', {'idendereco' : id.toString()});
+
+    var response = await http.get(url,
+          headers: ALL_HEADERS(user.userEntity!.sessionToken!));
+    final responseMap = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+        final endereco = EnderecoDTO.fromMap(responseMap['response']);
+        return Right(endereco);
+      } else {
+        return Left(Failure(responseMap['error'].toString()));
+      }
+
   }
 
   @override
   Future<Either<Failure, int>> saveOrUpdate(EnderecoEntity endereco) async {
     String? body;
-    String? path;
+    const path = 'enderecos/createorupdate';
 
     ///Novo Produto
     if (endereco.idendereco == null) {
       body = json.encode(EnderecoDTO().toMap(endereco, edit: false));
-      path = 'enderecos/createorupdate';
-
       ///
     } else {
       // Editando Produto
       body = json.encode(EnderecoDTO().toMap(endereco, edit: true));
-      path = 'enderecos/createorupdate';
     }
 
     try {

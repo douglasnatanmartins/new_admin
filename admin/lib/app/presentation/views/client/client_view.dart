@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:admin/app/presentation/controllers/client_controller.dart';
 import 'package:admin/app/presentation/views/client/components/add_client.dart';
 import 'package:admin/app/presentation/views/client/components/custom_data_table_clients.dart';
@@ -70,7 +68,7 @@ class _ClientViewState extends State<ClientView> {
                         return CustomDatatableClients(
                             list: snapshot.data!,
                             controller: _controller,
-                            refresh: (value) {});
+                            refresh: () => setState(() {}));
                       }
                   }
                 }),

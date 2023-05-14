@@ -108,6 +108,12 @@ abstract class _ClientControllerBase with Store {
   void setListCidades(List<CidadeEstadoPaisEntity> value) =>
       listCidades = value;
 
+  @observable
+  bool situacao = true;
+
+  @action
+  void setSituacao(bool value) => situacao = value;
+
   @action
   Future<List<ClientEntity>> getAll(BuildContext context) async {
     final result = await _clientUsecase.getAll();
@@ -171,7 +177,6 @@ abstract class _ClientControllerBase with Store {
         tipoendereco: 1,
         numero: numero ?? 'Não Informado');
 
-
     final result = await _enderecoUsecase.saveOrUpdate(endereco);
 
     if (result.isLeft()) {
@@ -200,12 +205,129 @@ abstract class _ClientControllerBase with Store {
       return false;
     }
     //
-    
+
     await Future.delayed(const Duration(seconds: 1), () async {
       CustomDialog.dismiss(context);
       await CustomSnackbar.show(
           cxt: context,
           message: 'Registro Salvo',
+          severity: InfoBarSeverity.success);
+      Navigator.of(context).pop();
+      return true;
+    });
+
+    return true;
+  }
+
+  /*====================================================
+    UPDATE CLIENTE
+  ====================================================*/
+
+  @action
+  Future<EnderecoEntity?> getEnderecoByID(
+      BuildContext context, int idendereco) async {
+    final result = await _enderecoUsecase.getClientById(idendereco);
+    if (result.isLeft()) {
+      CustomSnackbar.show(cxt: context, message: result.getLeft().message);
+      return null;
+    } else {
+      return result.getRight();
+    }
+  }
+
+  void initializeFunction(
+      {required ClientEntity client, required EnderecoEntity endereco}) {
+    setNameClient(client.nome!);
+    setNomeFantasia(client.nomefantasia ?? 'Não Informado');
+    setEmail(client.email!);
+    setCpfCNPJ(client.cpfcnpj!);
+    setTelefone(client.telefone!);
+    setTelefoneAdic(client.telefoneadic ?? 'Não Informado');
+    setCEP(endereco.cep!);
+    setBairro(endereco.bairro!);
+    setRua(endereco.rua!);
+    setNumero(endereco.numero ?? 'Não Informado');
+    setSituacao(client.situacao == 1 ? true : false);
+  }
+
+
+
+  /*====================================================
+    Função Update Cliente
+  ====================================================*/
+  @action
+  Future<bool> update(
+      {required BuildContext context, required ClientEntity clientEntity,
+      required EnderecoEntity enderecoEntity}) async {
+    ///
+    await CustomDialog.loading(context: context, title: 'Salvando...');
+    int newIDCidade = enderecoEntity.idcidade!;
+    String newNomeCidade = enderecoEntity.nomecidade!;
+    int newIDEstado = enderecoEntity.idestado!;
+    String newNomeEstado = enderecoEntity.nomeestado!;
+
+    if (cidade != null) {
+      if (cidade!.idcidade! != enderecoEntity.idcidade) {
+        newIDCidade = cidade!.idcidade!;
+        newNomeCidade = cidade!.nomecidade!;
+      }
+    }
+
+    if (estado != null) {
+      if (estado!.idestado! != enderecoEntity.idestado) {
+        newIDEstado = estado!.idestado!;
+        newNomeEstado = estado!.nomeestado!;
+      }
+    }
+
+    final endereco = EnderecoEntity(
+        idendereco: enderecoEntity.idendereco,
+        idcidade: newIDCidade,
+        nomecidade: newNomeCidade,
+        idestado: newIDEstado,
+        nomeestado: newNomeEstado,
+        cep: cep,
+        rua: rua,
+        bairro: bairro,
+        situacao: 1,
+        tipoendereco: 1,
+        numero: numero ?? 'Não Informado');
+
+    final result = await _enderecoUsecase.saveOrUpdate(endereco);
+
+    if (result.isLeft()) {
+      CustomDialog.dismiss(context);
+      CustomSnackbar.show(cxt: context, message: result.getLeft().message);
+      return false;
+    }
+
+    final cliente = ClientEntity(
+        idcliente: clientEntity.idcliente,
+        idendereco: endereco.idendereco,
+        nome: nomeCliente,
+        email: email,
+        nomefantasia: nomeFantasia ?? 'Não Informado',
+        cpfcnpj: cpfcnpj,
+        telefone: telefone,
+        telefoneadic: telefoneadic ?? 'Não Informado',
+        tipocliente: cpfcnpj!.length > 14 ? 2 : 1,
+        situacao: situacao ? 1 : 0);
+
+    final resultClient = await _clientUsecase.saveOrUpdate(cliente);
+
+    if (resultClient.isLeft()) {
+      CustomDialog.dismiss(context);
+      CustomSnackbar.show(
+          cxt: context, message: resultClient.getLeft().message);
+      return false;
+    }
+    //
+
+    await Future.delayed(const Duration(seconds: 1), () async {
+      CustomDialog.dismiss(context);
+      await CustomSnackbar.show(
+          cxt: context,
+          message: 'Registro Atualizado',
           severity: InfoBarSeverity.success);
       Navigator.of(context).pop();
       return true;

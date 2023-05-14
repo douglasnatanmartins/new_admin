@@ -5,6 +5,7 @@ import 'package:admin/app/domain/entities/client_entiy.dart';
 import 'package:admin/app/domain/entities/endereco_entity.dart';
 import 'package:admin/app/presentation/controllers/client_controller.dart';
 import 'package:admin/app/presentation/widgets/custom_auto_sugestion_box/custom_auto_sugestion_box.dart';
+import 'package:admin/app/presentation/widgets/custom_buttons/custom_buttom_status.dart';
 import 'package:admin/app/presentation/widgets/custom_buttons/custon_row_button_save.dart';
 import 'package:admin/app/presentation/widgets/custom_header/const_text_form.dart';
 import 'package:admin/app/presentation/widgets/custom_header/custom_form_header.dart';
@@ -21,11 +22,12 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 class UpdateClients extends StatelessWidget {
   UpdateClients(
       {super.key,
-      required this.refres,
+      required this.refresh,
       required this.controller,
-      required this.clientEntity, required this.enderecoEntity});
+      required this.clientEntity,
+      required this.enderecoEntity});
 
-  final Function() refres;
+  final Function refresh;
   final _formKey = GlobalKey<FormState>();
   final ClientController controller;
   final ClientEntity clientEntity;
@@ -42,7 +44,7 @@ class UpdateClients extends StatelessWidget {
             width: size.width / 1.6,
             height: size.height / 1.25,
             child: Column(children: [
-              const CustomFormHeader(title: 'Novo Cliente'),
+              const CustomFormHeader(title: 'Editando Cliente'),
               Form(
                 key: _formKey,
                 child: Expanded(
@@ -85,7 +87,8 @@ class UpdateClients extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
-                                initialValue: clientEntity.nomefantasia,
+                                initialValue: clientEntity.nomefantasia ??
+                                    'Não Informado',
                                 width: size.width / 7,
                                 title: 'Nome Fantasia',
                                 onChanged: controller.setNomeFantasia,
@@ -160,6 +163,7 @@ class UpdateClients extends StatelessWidget {
                                   builder: (_) {
                                     return CustomAutoSugestionBox<
                                         CidadeEstadoPaisEntity>(
+                                      editing: true,
                                       width: size.width / 7,
                                       list: controller.listEstados
                                           .map((e) => AutoSuggestBoxItem(
@@ -168,9 +172,10 @@ class UpdateClients extends StatelessWidget {
                                               ))
                                           .toList(),
                                       title: 'Estado *',
-                                      placeholder: enderecoEntity.nomeestado != null ?
-                                      enderecoEntity.nomeestado! :'selecione...',
-                                      validator: validatorSugestion,
+                                      placeholder:
+                                          enderecoEntity.nomeestado != null
+                                              ? enderecoEntity.nomeestado!
+                                              : 'selecione...',
                                       onSelected: (value) async {
                                         if (value.value != null) {
                                           if (value.value!.idestado != null) {
@@ -190,6 +195,7 @@ class UpdateClients extends StatelessWidget {
                                   builder: (_) {
                                     return CustomAutoSugestionBox<
                                         CidadeEstadoPaisEntity>(
+                                      editing: true,
                                       width: size.width / 3.43,
                                       list: controller.listCidades
                                           .map((e) => AutoSuggestBoxItem(
@@ -198,9 +204,10 @@ class UpdateClients extends StatelessWidget {
                                               ))
                                           .toList(),
                                       title: 'Cidade *',
-                                      placeholder: enderecoEntity.nomecidade != null ? enderecoEntity.nomecidade! :
-                                       'selecione...',
-                                      validator: validatorSugestion,
+                                      placeholder:
+                                          enderecoEntity.nomecidade != null
+                                              ? enderecoEntity.nomecidade!
+                                              : 'selecione...',
                                       onSelected: (value) {
                                         if (value != null) {
                                           controller.setCidade(value.value!);
@@ -220,6 +227,7 @@ class UpdateClients extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: enderecoEntity.bairro,
                                 width: size.width / 7,
                                 title: 'Bairro *',
                                 validator: validator,
@@ -229,6 +237,7 @@ class UpdateClients extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: enderecoEntity.rua,
                                 width: size.width / 7,
                                 title: 'Rua / Logradouro *',
                                 validator: validator,
@@ -238,11 +247,29 @@ class UpdateClients extends StatelessWidget {
                             Padding(
                               padding: const EdgeInsets.only(left: 10),
                               child: CustomTextFormBox(
+                                initialValue: enderecoEntity.numero,
                                 width: size.width / 7,
                                 title: 'Numero ',
                                 validator: validator,
                                 onChanged: controller.setNumero,
                               ),
+                            ),
+                            _sizedBox(),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 25, left: 20),
+                              child: Observer(builder: (_) {
+                                return CustomButtonStatus(
+                                  width: 200,
+                                  checked: controller.situacao,
+                                  onChanged: (bool value) {
+                                    if (value) {
+                                      controller.setSituacao(true);
+                                    } else {
+                                      controller.setSituacao(false);
+                                    }
+                                  },
+                                );
+                              }),
                             ),
                           ],
                         ),
@@ -252,9 +279,13 @@ class UpdateClients extends StatelessWidget {
                         width: size.width,
                         onPressed: () async {
                           if (_formKey.currentState!.validate()) {
-                            await controller.save(context: context).then((_) {
-                             // widget.refres();
-                            });
+                            final result =  await controller.update(
+                                    context: context,
+                                    enderecoEntity: enderecoEntity,
+                                    clientEntity: clientEntity);
+                            if(result){
+                              refresh();
+                            }        
                           }
                         },
                       ),
